@@ -1,16 +1,21 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { use, useState } from "react";
+// import { Button } from 'antd'
+// import { UpCircleOutlined } from '@ant-design/icons'
+// import Comp1 from './components/Comp1'
+// import Comp2 from './components/Comp2'
+import "./App.css";
+
+import { useRoutes, Link } from "react-router-dom";
+import router from "./router";
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  const [count, setCount] = useState(0);
+  const outlet = useRoutes(router);
   return (
     <>
-      <div>顶</div>
+      <div>{outlet}</div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

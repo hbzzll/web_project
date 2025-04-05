@@ -1,0 +1,9 @@
+$color: #eee;
+body{
+    background-color: $color;
+}
+
+img{
+    // Prevent dragging of images
+    -webkit-user-drag: none;
+}
