@@ -7,15 +7,12 @@ import "./App.css";
 
 import { useRoutes, Link } from "react-router-dom";
 import router from "./router";
+import HomePage from "./view/HomePage";
 
 function App() {
-  const [count, setCount] = useState(0);
-  const outlet = useRoutes(router);
-  return (
-    <>
-      <div>{outlet}</div>
-    </>
-  );
+  // const [count, setCount] = useState(0);
+  // const outlet = useRoutes(router);
+  return <HomePage />;
 }
 
 export default App;
