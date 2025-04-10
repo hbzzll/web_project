@@ -17,15 +17,11 @@ body {
   justify-content: space-between;
   align-items: center;
 }
-a {
-  text-decoration: none;
-  color: #000;
-  text-transform: capitalize;
-}
+
 ul {
   list-style-type: none;
 }
-button {
+/* button {
   border-radius: 5px;
   padding: 17px 30px;
   background: #27ae60;
@@ -36,7 +32,7 @@ button {
 }
 button i {
   margin-right: 5px;
-}
+} */
 
 .heading {
   text-align: center;
