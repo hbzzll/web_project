@@ -1,4 +1,5 @@
 import "./Hero.scss";
+import styles from "./Hero.scss";
 import Heading from "../../../components/Heading";
 
 const Hero = () => {
@@ -11,7 +12,7 @@ const Hero = () => {
             subtitle="Find new & featured property located in your local city."
           />
 
-          <form action="">
+          <form action="" className="form">
             <div className="flex" style={{ flexDirection: "column" }}>
               <span>Search all properties</span>
               <input type="text" placeholder="city" />
