@@ -1,5 +1,3 @@
-# TDDD27_2025_Group38
-
 # Renting System and Location Query Project
 
 ## Project Structure
