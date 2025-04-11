@@ -11,13 +11,13 @@
 ## Technologies Used
 
 ### Frontend:
-- **Framework**: Vue
+- **Framework**: React
 - **3D Model Rendering**: Three.js
 - **CSS Framework**: Bootstrap CSS
 - **State Management**: Redux
 
 ### Backend:
 - **Framework**: Node.js
-- **Database**: MySQL
+- **Database**: MongoDB
 
 ---
