@@ -28,18 +28,42 @@ interface LoginForm {
   password: string;
 }
 
+interface signupForm {
+  name: string;
+  email: string;
+  password: string;
+}
+
 interface LoginResponse {
+  success: boolean;
   msg: string;
   token: string;
 }
 
-const fetchLogin = (loginForm: LoginForm) => {
+const fetchSignup = (signupForm: signupForm) => {
   return async (dispatch: (action: any) => void) => {
-    const res: LoginResponse = await request.post("/api/register", loginForm);
+    const res: LoginResponse = await request.post("/api/signup", signupForm);
     dispatch(setToken(res.token));
   };
 };
 
-export { fetchLogin, setToken };
+const fetchLogin = (loginForm: LoginForm) => {
+  return async (dispatch: (action: any) => void) => {
+    try {
+      const res: LoginResponse = await request.post("/api/login", loginForm);
+      dispatch(setToken(res.token));
+      return { success: true, token: res.token };
+    } catch (err: any) {
+      // 登录失败
+      console.error("登录失败：", err);
+      return {
+        success: false,
+        error: err.response?.data?.error || "Login failed",
+      };
+    }
+  };
+};
+
+export { fetchSignup, fetchLogin, setToken };
 
 export default userReducer;

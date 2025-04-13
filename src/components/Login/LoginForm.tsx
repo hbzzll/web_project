@@ -10,12 +10,18 @@ const LoginForm = ({ onSwitch }: { onSwitch: () => void }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault; //prevent refresh the page
     console.log("Logging in with:", { email, password });
-    dispatch(fetchLogin({ email, password }));
+    const result = await dispatch(fetchLogin({ email, password }));
+    if (result.success) {
+      // message.success("登录成功");
+      navigate("/about");
+    } else {
+      // message.error(result.error);
+    }
 
-    navigate("/about");
+    // navigate("/about");
     // message.success("登陆成功");
   };
   return (
