@@ -1,6 +1,13 @@
-import { legacy_createStore } from "redux";
-import reducer from "./reducer.tsx";
+import { configureStore } from "@reduxjs/toolkit";
+import userReducer from "./reducer";
 
-const store = legacy_createStore(reducer);
+const store = configureStore({
+  reducer: {
+    user: userReducer,
+  },
+});
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
 
 export default store;
