@@ -1,7 +1,10 @@
 import { useState } from "react";
 import "./interface.scss";
+import { fetchSignup } from "../../store/reducer";
+import { useAppDispatch } from "../../store/hooks";
 
 const SignUpForm = ({ onSwitch }: { onSwitch: () => void }) => {
+  const dispatch = useAppDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -9,7 +12,7 @@ const SignUpForm = ({ onSwitch }: { onSwitch: () => void }) => {
   const handleRegister = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("注册信息", { name, email, password });
-    // dispatch(fetchRegister({ name, email, password }));
+    dispatch(fetchSignup({ name, email, password }));
   };
 
   return (
