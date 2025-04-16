@@ -1,0 +1,25 @@
+.container-rent {
+  display: flex;
+  padding: 50px;
+}
+
+.filter {
+  position: sticky;
+  top: 120px;
+  width: 300px;
+  height: max-content;
+  padding-right: 50px;
+
+  .search {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.house {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding-left: 50px;
+  border-left: 2px solid #e5e5e5;
+}
