@@ -13,9 +13,9 @@ const Header = () => {
     <>
       <header>
         <div className="container flex">
-          <div className="logo">
+          <Link to="/" className="logo">
             <img src="/images/logo.png" alt="" />
-          </div>
+          </Link>
 
           <div className="nav">
             <ul className={navList ? "small" : "flex"}>

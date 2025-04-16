@@ -1,6 +1,7 @@
 import Heading from "../../../components/Heading";
 import RentCard from "../../../components/RentCard/RentCard";
-
+import { list } from "../../../Data/data";
+import "./Recent.scss";
 const Recent = () => {
   return (
     <>
@@ -10,7 +11,11 @@ const Recent = () => {
             title="Recent Property Listed"
             subtitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam."
           />
-          <RentCard />
+          <div className="recent-card">
+            {list.map((item, index) => (
+              <RentCard key={index} data={item} />
+            ))}
+          </div>
         </div>
       </div>
     </>

@@ -1,0 +1,56 @@
+.imag {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+.container-detail {
+  display: flex;
+  justify-content: space-between;
+  padding: 50px;
+  margin: 0 40px;
+  gap: 40px;
+}
+
+.detail-info {
+  flex: 1;
+}
+
+.title {
+  font-size: 40px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.location {
+  color: #b95353;
+  font-size: 18px;
+  font-weight: 400;
+  margin-bottom: 20px;
+}
+
+.property {
+  font-size: 20px;
+  font-weight: 400;
+  padding: 20px 0;
+}
+
+.contact-info {
+}
+
+.contact {
+  height: 200px;
+  padding: 16px;
+  border: 2px solid #e5e5e5;
+  border-radius: 20px;
+  box-shadow: 0 0 20px 0 rgb(112 121 138 / 18%);
+  margin-bottom: 30px;
+}
+
+.landlord {
+  height: 200px;
+  padding: 16px;
+  border: 2px solid #e5e5e5;
+  border-radius: 20px;
+  box-shadow: 0 0 20px 0 rgb(112 121 138 / 18%);
+}

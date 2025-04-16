@@ -1,0 +1,20 @@
+.description-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  padding: 10px 0;
+}
+
+.description-item {
+  display: flex;
+  justify-content: space-between;
+  background: #f9f9f9;
+  width: 300px;
+  border-radius: 10px;
+  padding: 25px 16px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  font-family: sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #222;
+}

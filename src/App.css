@@ -51,6 +51,14 @@ button i {
   color: #72809d;
 }
 
+.box {
+  border-radius: 20px;
+  overflow: hidden;
+  width: 300px;
+  margin-bottom: 40px;
+  cursor: pointer;
+}
+
 .shadow {
   box-shadow: 0 0 20px 0 rgb(112 121 138 / 18%);
 }
@@ -71,6 +79,7 @@ img {
 .btn2 {
   border-radius: 50px;
   font-size: 20px;
+  padding: 2px;
 }
 
 label {
