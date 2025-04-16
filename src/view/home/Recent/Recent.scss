@@ -1,0 +1,11 @@
+.recent padding .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.recent-card {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}

@@ -1,6 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "reset-css/reset.css";
+import "leaflet/dist/leaflet.css";
 
 //全局样式
 import "@/assets/styles/global.scss";
