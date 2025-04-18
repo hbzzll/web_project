@@ -1,4 +1,3 @@
-import { RadarChartOutlined } from "@ant-design/icons";
 import { createSlice } from "@reduxjs/toolkit";
 import { request } from "../utils/request";
 
@@ -12,9 +11,9 @@ const usetStore = createSlice({
 
   reducers: {
     setUser(state, action) {
-      const { token, username } = action.payload;
+      const { token, name } = action.payload;
       state.token = token;
-      state.name = username;
+      state.name = name;
       state.isAuth = !!token; // = Boolean()
       localStorage.setItem("token_key", token);
     },
@@ -27,7 +26,7 @@ const usetStore = createSlice({
   },
 });
 
-const { setUser } = usetStore.actions;
+const { setUser, logout } = usetStore.actions;
 
 const userReducer = usetStore.reducer;
 
@@ -59,7 +58,7 @@ const fetchLogin = (loginForm: LoginForm) => {
   return async (dispatch: (action: any) => void) => {
     try {
       const res: LoginResponse = await request.post("/api/login", loginForm);
-      dispatch(setUser({ token: res.token, username: res.name }));
+      dispatch(setUser({ token: res.token, name: res.name }));
       return res;
     } catch (err: any) {
       console.error("登录失败：", err);
@@ -71,6 +70,6 @@ const fetchLogin = (loginForm: LoginForm) => {
   };
 };
 
-export { fetchSignup, fetchLogin, setUser };
+export { fetchSignup, fetchLogin, setUser, logout };
 
 export default userReducer;
