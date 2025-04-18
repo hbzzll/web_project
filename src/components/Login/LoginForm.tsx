@@ -3,29 +3,36 @@ import { useState } from "react";
 import { useAppDispatch } from "../../store/hooks";
 import { fetchLogin } from "../../store/reducer";
 import { useNavigate } from "react-router-dom";
+import { message } from "antd";
+import "antd/dist/reset.css";
 
 const LoginForm = ({ onSwitch }: { onSwitch: () => void }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [messageApi, contextHolder] = message.useMessage();
+  const success = () => {
+    messageApi.open({
+      type: "success",
+      content: "This is a success message",
+    });
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault; //prevent refresh the page
+    e.preventDefault(); //prevent refresh the page
     console.log("Logging in with:", { email, password });
     const result = await dispatch(fetchLogin({ email, password }));
     if (result.success) {
-      // message.success("登录成功");
-      navigate("/about");
+      success();
     } else {
-      // message.error(result.error);
+      message.error("Login failed");
+      console.log("failed");
     }
-
-    // navigate("/about");
-    // message.success("登陆成功");
   };
   return (
     <>
+      {contextHolder}
       <h2 className="form-title">Sign in with</h2>
       <div className="social-login">
         <button className="social-button">

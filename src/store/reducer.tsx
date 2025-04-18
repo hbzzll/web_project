@@ -6,19 +6,28 @@ const usetStore = createSlice({
   name: "user",
   initialState: {
     token: localStorage.getItem("token_key") || "",
+    isAuth: !!localStorage.getItem("token_key"),
+    name: "",
   },
 
   reducers: {
-    setToken(state, action) {
-      state.token = action.payload;
-
-      //store in loacalstorage
-      localStorage.setItem("token_key", action.payload);
+    setUser(state, action) {
+      const { token, username } = action.payload;
+      state.token = token;
+      state.name = username;
+      state.isAuth = !!token; // = Boolean()
+      localStorage.setItem("token_key", token);
+    },
+    logout(state) {
+      state.token = "";
+      state.name = "";
+      state.isAuth = false;
+      localStorage.removeItem("token_key");
     },
   },
 });
 
-const { setToken } = usetStore.actions;
+const { setUser } = usetStore.actions;
 
 const userReducer = usetStore.reducer;
 
@@ -36,14 +45,13 @@ interface signupForm {
 
 interface LoginResponse {
   success: boolean;
-  msg: string;
   token: string;
+  name: string;
 }
 
 const fetchSignup = (signupForm: signupForm) => {
   return async (dispatch: (action: any) => void) => {
     const res: LoginResponse = await request.post("/api/signup", signupForm);
-    dispatch(setToken(res.token));
   };
 };
 
@@ -51,10 +59,9 @@ const fetchLogin = (loginForm: LoginForm) => {
   return async (dispatch: (action: any) => void) => {
     try {
       const res: LoginResponse = await request.post("/api/login", loginForm);
-      dispatch(setToken(res.token));
-      return { success: true, token: res.token };
+      dispatch(setUser({ token: res.token, username: res.name }));
+      return res;
     } catch (err: any) {
-      // 登录失败
       console.error("登录失败：", err);
       return {
         success: false,
@@ -64,6 +71,6 @@ const fetchLogin = (loginForm: LoginForm) => {
   };
 };
 
-export { fetchSignup, fetchLogin, setToken };
+export { fetchSignup, fetchLogin, setUser };
 
 export default userReducer;
