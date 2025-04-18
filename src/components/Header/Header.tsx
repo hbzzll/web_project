@@ -4,10 +4,13 @@ import "./Header.scss";
 import { Link } from "react-router-dom";
 import { navlist } from "../../Data/data";
 import LoginModal from "../Login/login";
-
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 const Header = () => {
   const [navList, setNavList] = useState(false);
   const [open, setopen] = useState(false);
+  const { isAuth, name } = useSelector((state: RootState) => state.user);
+  // console.log("User Authentication Status:", isAuth, "User Name:", name);
 
   return (
     <>
@@ -30,9 +33,16 @@ const Header = () => {
             <h4>
               <span>2</span> My List
             </h4>
-            <button className="btn1" onClick={() => setopen(true)}>
-              <i className="fa fa-sign-out"></i> Sign In
-            </button>
+
+            {isAuth ? (
+              <button className="btn1" onClick={() => setopen(true)}>
+                <i className="fa fa-sign-out"></i> User
+              </button>
+            ) : (
+              <button className="btn1" onClick={() => setopen(true)}>
+                <i className="fa fa-sign-out"></i> Sign In
+              </button>
+            )}
           </div>
 
           <div className="toggle">
