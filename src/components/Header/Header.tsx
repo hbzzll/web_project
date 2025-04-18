@@ -6,11 +6,11 @@ import { navlist } from "../../Data/data";
 import LoginModal from "../Login/login";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
+
 const Header = () => {
   const [navList, setNavList] = useState(false);
   const [open, setopen] = useState(false);
   const { isAuth, name } = useSelector((state: RootState) => state.user);
-  // console.log("User Authentication Status:", isAuth, "User Name:", name);
 
   return (
     <>
@@ -36,7 +36,7 @@ const Header = () => {
 
             {isAuth ? (
               <button className="btn1" onClick={() => setopen(true)}>
-                <i className="fa fa-sign-out"></i> User
+                <i className="fa fa-sign-out"></i> User{name}
               </button>
             ) : (
               <button className="btn1" onClick={() => setopen(true)}>

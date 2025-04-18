@@ -1,17 +1,32 @@
-import { use, useState } from "react";
-// import { Button } from 'antd'
-// import { UpCircleOutlined } from '@ant-design/icons'
-// import Comp1 from './components/Comp1'
-// import Comp2 from './components/Comp2'
+import { request } from "./utils/request";
 import "./App.css";
-
-import { useRoutes, Link } from "react-router-dom";
-import router from "./router";
 import HomePage from "./view/HomePage";
+import { useEffect } from "react";
+import { useAppDispatch } from "./store/hooks";
+import { setUser, logout } from "./store/reducer";
 
 function App() {
-  // const [count, setCount] = useState(0);
-  // const outlet = useRoutes(router);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token_key");
+
+    if (token) {
+      request
+        .get("/api/user", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {
+          dispatch(setUser({ token, name: res.name }));
+        })
+        .catch(() => {
+          dispatch(logout());
+        });
+    }
+  }, []);
+
   return <HomePage />;
 }
 
