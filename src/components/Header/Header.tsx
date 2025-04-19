@@ -6,12 +6,16 @@ import { navlist } from "../../Data/data";
 import LoginModal from "../Login/login";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
+import { logout } from "../../store/reducer";
+import { useAppDispatch } from "../../store/hooks";
+import UserMenu from "../Login/Usermenu/Usermenu";
+import { Button } from "antd";
 
 const Header = () => {
   const [navList, setNavList] = useState(false);
   const [open, setopen] = useState(false);
   const { isAuth, name } = useSelector((state: RootState) => state.user);
-
+  const dispatch = useAppDispatch();
   return (
     <>
       <header>
@@ -30,18 +34,17 @@ const Header = () => {
             </ul>
           </div>
           <div className="button flex">
-            <h4>
-              <span>2</span> My List
-            </h4>
-
             {isAuth ? (
-              <button className="btn1" onClick={() => setopen(true)}>
-                <i className="fa fa-sign-out"></i> User{name}
-              </button>
+              <UserMenu onLogout={() => dispatch(logout())} />
             ) : (
-              <button className="btn1" onClick={() => setopen(true)}>
-                <i className="fa fa-sign-out"></i> Sign In
-              </button>
+              <Button
+                size="large"
+                color="purple"
+                variant="filled"
+                onClick={() => setopen(true)}
+              >
+                Sign In
+              </Button>
             )}
           </div>
 
