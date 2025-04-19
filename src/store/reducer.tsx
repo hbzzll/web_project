@@ -44,8 +44,10 @@ interface signupForm {
 
 interface LoginResponse {
   success: boolean;
-  token: string;
-  name: string;
+  category?: string;
+  message?: string;
+  token?: string;
+  name?: string;
 }
 
 interface SignupResponse {
@@ -65,10 +67,10 @@ const fetchLogin = (loginForm: LoginForm) => {
       dispatch(setUser({ token: res.token, name: res.name }));
       return res;
     } catch (err: any) {
-      console.error("登录失败：", err);
       return {
         success: false,
-        error: err.response?.data?.error || "Login failed",
+        category: err.response?.data?.category || null,
+        message: err.response?.data?.message || "Login failed",
       };
     }
   };

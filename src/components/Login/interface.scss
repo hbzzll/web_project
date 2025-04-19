@@ -85,6 +85,12 @@
   padding: 0 1.25rem 0 1rem;
   transition: 0.2s ease;
 }
+.input-field.error {
+  border-color: red !important;
+}
+.login-form .input-wrapper .error-message {
+  color: red;
+}
 
 .login-form .input-wrapper .input-field:focus {
   border-color: #5f41e4;
@@ -93,7 +99,7 @@
 .login-form .forgot-pass-link {
   display: block;
   width: fit-content;
-  margin-top: -0.46rem;
+  margin-top: 20px;
 }
 
 .login-form .input-wrapper .input-field::placeholder {
@@ -110,7 +116,7 @@
   font-weight: 500;
   font-size: 1.125rem;
   background-color: #5f41e4;
-  margin-top: 2.19rem;
+  margin-top: 1rem;
   border-radius: 0.31rem;
   transition: 0.2s ease;
 }
