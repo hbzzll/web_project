@@ -48,10 +48,14 @@ interface LoginResponse {
   name: string;
 }
 
-const fetchSignup = (signupForm: signupForm) => {
-  return async (dispatch: (action: any) => void) => {
-    const res: LoginResponse = await request.post("/api/signup", signupForm);
-  };
+interface SignupResponse {
+  success: boolean;
+  msg: string;
+}
+
+const fetchSignup = async (signupForm: signupForm) => {
+  const res: SignupResponse = await request.post("/api/signup", signupForm);
+  return res;
 };
 
 const fetchLogin = (loginForm: LoginForm) => {

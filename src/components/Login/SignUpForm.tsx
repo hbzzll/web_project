@@ -3,7 +3,13 @@ import "./interface.scss";
 import { fetchSignup } from "../../store/reducer";
 import { useAppDispatch } from "../../store/hooks";
 
-const SignUpForm = ({ onSwitch }: { onSwitch: () => void }) => {
+const SignUpForm = ({
+  onSwitch,
+  onClose,
+}: {
+  onSwitch: () => void;
+  onClose: () => void;
+}) => {
   const dispatch = useAppDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -11,8 +17,18 @@ const SignUpForm = ({ onSwitch }: { onSwitch: () => void }) => {
 
   const handleRegister = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("注册信息", { name, email, password });
-    dispatch(fetchSignup({ name, email, password }));
+
+    fetchSignup({ name, email, password })
+      .then((res) => {
+        if (res.success) {
+          onClose();
+        } else {
+          console.log("falied");
+        }
+      })
+      .catch((error) => {
+        console.error("sign up failed", error);
+      });
   };
 
   return (
@@ -26,6 +42,7 @@ const SignUpForm = ({ onSwitch }: { onSwitch: () => void }) => {
             className="input-field"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            required
           />
         </div>
         <div className="input-wrapper">
@@ -35,6 +52,7 @@ const SignUpForm = ({ onSwitch }: { onSwitch: () => void }) => {
             className="input-field"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            required
           />
         </div>
         <div className="input-wrapper">
@@ -44,6 +62,7 @@ const SignUpForm = ({ onSwitch }: { onSwitch: () => void }) => {
             className="input-field"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            required
           />
         </div>
 

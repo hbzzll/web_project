@@ -15,7 +15,7 @@ const LoginModal: React.FC<Props> = ({ onClose, open }) => {
       maskClosable={false}
       centered={true}
     >
-      <Interface />
+      <Interface onClose={onClose} />
     </Modal>
   );
 };

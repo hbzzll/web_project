@@ -3,36 +3,26 @@ import { useState } from "react";
 import { useAppDispatch } from "../../store/hooks";
 import { fetchLogin } from "../../store/reducer";
 import { useNavigate } from "react-router-dom";
-import { message } from "antd";
-import "antd/dist/reset.css";
 
-const LoginForm = ({ onSwitch }: { onSwitch: () => void }) => {
+const LoginForm = ({
+  onSwitch,
+  onClose,
+}: {
+  onSwitch: () => void;
+  onClose: () => void;
+}) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [messageApi, contextHolder] = message.useMessage();
-  const success = () => {
-    messageApi.open({
-      type: "success",
-      content: "This is a success message",
-    });
-  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); //prevent refresh the page
     console.log("Logging in with:", { email, password });
     const result = await dispatch(fetchLogin({ email, password }));
-    if (result.success) {
-      success();
-    } else {
-      message.error("Login failed");
-      console.log("failed");
-    }
   };
   return (
     <>
-      {contextHolder}
       <h2 className="form-title">Sign in with</h2>
       <div className="social-login">
         <button className="social-button">
@@ -65,7 +55,7 @@ const LoginForm = ({ onSwitch }: { onSwitch: () => void }) => {
             className="input-field"
             defaultValue={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
+            // required
           />
         </div>
         <div className="input-wrapper">
@@ -75,7 +65,7 @@ const LoginForm = ({ onSwitch }: { onSwitch: () => void }) => {
             className="input-field"
             defaultValue={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
+            // required
           />
         </div>
 
