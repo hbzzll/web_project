@@ -22,7 +22,7 @@ const SignUpForm = ({
     fetchSignup({ name, email, password })
       .then((res) => {
         if (res.success) {
-          onClose();
+          onSwitch();
         } else {
           setEmailError("Email already exists.");
         }
