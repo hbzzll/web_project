@@ -14,6 +14,7 @@ const SignUpForm = ({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [emailerror, setEmailError] = useState("");
 
   const handleRegister = (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,10 +24,11 @@ const SignUpForm = ({
         if (res.success) {
           onClose();
         } else {
-          console.log("falied");
+          setEmailError("Email already exists.");
         }
       })
       .catch((error) => {
+        setEmailError("sign up failed, try again");
         console.error("sign up failed", error);
       });
   };
@@ -49,12 +51,17 @@ const SignUpForm = ({
           <input
             type="email"
             placeholder="Email address"
-            className="input-field"
+            className={`input-field ${emailerror ? "error" : ""}`}
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setEmailError("");
+            }}
             required
           />
+          {emailerror && <div className="error-message">{emailerror}</div>}
         </div>
+
         <div className="input-wrapper">
           <input
             type="password"

@@ -15,11 +15,27 @@ const LoginForm = ({
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [emailerror, setEmailError] = useState("");
+  const [passworderror, setPasswordError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); //prevent refresh the page
+    setEmailError("");
+    setPasswordError("");
+
     console.log("Logging in with:", { email, password });
-    const result = await dispatch(fetchLogin({ email, password }));
+    const res = await dispatch(fetchLogin({ email, password }));
+    if (res.success) {
+      onClose();
+    } else {
+      if (res.category === "email") {
+        setEmailError(res.message);
+      } else if (res.category === "password") {
+        setPasswordError(res.message);
+      } else {
+        alert(res.message);
+      }
+    }
   };
   return (
     <>
@@ -52,21 +68,32 @@ const LoginForm = ({
           <input
             type="email"
             placeholder="Email address"
-            className="input-field"
-            defaultValue={email}
-            onChange={(e) => setEmail(e.target.value)}
-            // required
+            className={`input-field ${emailerror ? "error" : ""}`}
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setEmailError("");
+            }}
+            required
           />
+          {emailerror && <div className="error-message">{emailerror}</div>}
         </div>
+
         <div className="input-wrapper">
           <input
             type="password"
             placeholder="Password"
-            className="input-field"
-            defaultValue={password}
-            onChange={(e) => setPassword(e.target.value)}
-            // required
+            className={`input-field ${passworderror ? "error" : ""}`}
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              setPasswordError("");
+            }}
+            required
           />
+          {passworderror && (
+            <div className="error-message">{passworderror}</div>
+          )}
         </div>
 
         <a href="#" className="forgot-pass-link">

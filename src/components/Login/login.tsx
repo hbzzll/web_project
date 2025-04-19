@@ -12,6 +12,7 @@ const LoginModal: React.FC<Props> = ({ onClose, open }) => {
       open={open}
       onCancel={onClose}
       footer={null}
+      destroyOnClose={true}
       maskClosable={false}
       centered={true}
     >
