@@ -5,6 +5,7 @@ import {
   ProfileOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import { Color } from "antd/es/color-picker";
 
 const UserMenu = ({ onLogout }: { onLogout: () => void }) => {
   const navigate = useNavigate();
@@ -12,13 +13,21 @@ const UserMenu = ({ onLogout }: { onLogout: () => void }) => {
   const menuItems = [
     {
       key: "profile",
-      label: "Profile",
+      label: (
+        <span style={{ fontSize: 16, padding: "5px 10px", display: "block" }}>
+          Profile
+        </span>
+      ),
       icon: <ProfileOutlined />,
-      onClick: () => navigate("/profile"),
+      onClick: () => navigate("/Menu/Profile"),
     },
     {
       key: "logout",
-      label: "Log out",
+      label: (
+        <span style={{ fontSize: 16, padding: "5px 10px", display: "block" }}>
+          Log out
+        </span>
+      ),
       icon: <LogoutOutlined />,
       onClick: onLogout,
     },
