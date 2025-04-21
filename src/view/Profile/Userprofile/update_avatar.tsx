@@ -23,20 +23,10 @@ const AvatarUpdate = ({ previewUrl, setPreviewUrl }: Props) => {
   const handleCrop = () => {
     const canvas = editorRef[0]?.getImageScaledToCanvas();
     if (canvas) {
-      canvas.toBlob((blob) => {
-        if (blob) {
-          const previewUrl = URL.createObjectURL(blob);
-          setPreviewUrl(previewUrl);
-        }
-        setVisible(false);
-      }, "image/png");
+      const url = canvas.toDataURL();
+      setPreviewUrl(url);
+      setVisible(false);
     }
-
-    // if (canvas) {
-    //   const url = canvas.toDataURL();
-    //   setPreviewUrl(url);
-    //   setVisible(false);
-    // }
   };
 
   return (
