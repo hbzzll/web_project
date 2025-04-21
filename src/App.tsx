@@ -19,7 +19,14 @@ function App() {
           },
         })
         .then((res) => {
-          dispatch(setUser({ token, name: res.name }));
+          dispatch(
+            setUser({
+              token,
+              name: res.name,
+              email: res.email,
+              profile: res.profile,
+            })
+          );
         })
         .catch(() => {
           dispatch(logout());

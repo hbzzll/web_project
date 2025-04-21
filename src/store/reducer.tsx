@@ -1,25 +1,50 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { request } from "../utils/request";
 
+interface UserProfile {
+  name?: string;
+  contactEmail?: string;
+  phone?: string;
+  intro?: string;
+  gender?: string;
+  avatar?: string;
+}
+
+interface UserState {
+  token: string;
+  isAuth: boolean;
+  name: string;
+  email: string;
+  profile: UserProfile;
+}
+
+const initialState: UserState = {
+  token: localStorage.getItem("token_key") || "",
+  isAuth: !!localStorage.getItem("token_key"),
+  name: "",
+  email: "",
+  profile: {},
+};
+
 const usetStore = createSlice({
   name: "user",
-  initialState: {
-    token: localStorage.getItem("token_key") || "",
-    isAuth: !!localStorage.getItem("token_key"),
-    name: "",
-  },
+  initialState,
 
   reducers: {
     setUser(state, action) {
-      const { token, name } = action.payload;
+      const { token, name, email, profile } = action.payload;
       state.token = token;
       state.name = name;
+      state.email = email;
       state.isAuth = !!token; // = Boolean()
+      state.profile = profile;
       localStorage.setItem("token_key", token);
     },
     logout(state) {
       state.token = "";
       state.name = "";
+      state.email = "";
+      state.profile = {};
       state.isAuth = false;
       localStorage.removeItem("token_key");
     },
@@ -48,6 +73,8 @@ interface LoginResponse {
   message?: string;
   token?: string;
   name?: string;
+  email?: string;
+  profile?: {};
 }
 
 interface SignupResponse {
@@ -64,7 +91,14 @@ const fetchLogin = (loginForm: LoginForm) => {
   return async (dispatch: (action: any) => void) => {
     try {
       const res: LoginResponse = await request.post("/api/login", loginForm);
-      dispatch(setUser({ token: res.token, name: res.name }));
+      dispatch(
+        setUser({
+          token: res.token,
+          name: res.name,
+          email: res.email,
+          profile: res.profile,
+        })
+      );
       return res;
     } catch (err: any) {
       return {

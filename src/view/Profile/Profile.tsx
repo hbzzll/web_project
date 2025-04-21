@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 import {
   DesktopOutlined,
   FileOutlined,
@@ -29,16 +30,16 @@ function getItem(
 }
 
 const items: MenuItem[] = [
-  getItem("User", "sub1", <UserOutlined />),
-  getItem("Process", "2", <DesktopOutlined />),
-  getItem("Favourites", "1", <PieChartOutlined />),
+  getItem("User", "/Profile", <UserOutlined />),
+  getItem("Process", "/Process", <DesktopOutlined />),
+  getItem("Favourites", "/Favourites", <PieChartOutlined />),
 
-  getItem("Publish", "9", <FileOutlined />),
+  getItem("Publish", "/publish", <FileOutlined />),
   getItem("Team", "sub2", <TeamOutlined />, [
     getItem("Team 1", "6"),
     getItem("Team 2", "8"),
   ]),
-  getItem("Log out", "3", <FileOutlined />),
+  getItem("Log out", "/logout", <FileOutlined />),
 ];
 
 const App: React.FC = () => {
@@ -46,6 +47,7 @@ const App: React.FC = () => {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+  const navigate = useNavigate();
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
@@ -57,17 +59,14 @@ const App: React.FC = () => {
         <div className="demo-logo-vertical" />
         <Menu
           theme="dark"
-          defaultSelectedKeys={["sub1"]}
+          defaultSelectedKeys={["/Profile"]}
           mode="inline"
           items={items}
+          onClick={(info) => navigate(`/Menu${info.key}`)}
         />
       </Sider>
       <Layout>
         <Content style={{ margin: "0 16px" }}>
-          {/* <Breadcrumb style={{ margin: "16px 0" }}>
-            <Breadcrumb.Item>User</Breadcrumb.Item>
-            <Breadcrumb.Item>Bill</Breadcrumb.Item>
-          </Breadcrumb> */}
           <div
             style={{
               padding: 24,
@@ -76,7 +75,7 @@ const App: React.FC = () => {
               borderRadius: borderRadiusLG,
             }}
           >
-            <UserProfile />
+            <Outlet />
           </div>
         </Content>
         <Footer style={{ textAlign: "center" }}>
