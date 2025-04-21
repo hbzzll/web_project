@@ -4,6 +4,8 @@ import Rent from "./rent/Rent";
 import Header from "../components/Header/Header";
 import RentDetail from "../components/RentDetail/RenDetail";
 import Profile from "./Profile/Profile";
+import UserProfile from "./Profile/Userprofile/Userprofile";
+import Favourites from "./Profile/Favourites/Favourites";
 
 const HomePage = () => {
   return (
@@ -13,7 +15,10 @@ const HomePage = () => {
         <Route path="/" element={<Home />} />
         <Route path="/rent" element={<Rent />} />
         <Route path="/list/:id" element={<RentDetail />} />
-        <Route path="/Menu/Profile" element={<Profile />} />
+        <Route path="/Menu" element={<Profile />}>
+          <Route path="Profile" element={<UserProfile />} />
+          <Route path="Favourites" element={<Favourites />} />
+        </Route>
       </Routes>
     </>
   );
