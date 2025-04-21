@@ -15,7 +15,7 @@ const UserProfile = () => {
 
   useEffect(() => {
     setPreviewUrl(profile.avatar || "");
-  });
+  }, []);
 
   const handleSave = async () => {
     try {
@@ -32,8 +32,7 @@ const UserProfile = () => {
           },
         }
       );
-
-      message.success("信息保存成功！");
+      message.success("success");
       setIsEditing(false);
     } catch (err) {
       message.error("failed");
