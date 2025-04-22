@@ -9,19 +9,41 @@ import {
   Row,
   Col,
   Switch,
+  message,
 } from "antd";
+import { request } from "../../../utils/request";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../store";
 
 const { Option } = Select;
 
 const Publish = () => {
-  const onFinish = (values: any) => {
-    console.log("Form Data Submitted:", values);
+  const [form] = Form.useForm();
+  const token = localStorage.getItem("token_key");
+  const { email } = useSelector((state: RootState) => state.user);
+
+  const onFinish = async (values: any) => {
+    const property = { ...values, email: email };
+    try {
+      const res = await request.post("/api/house/publish", property, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      message.success("success");
+      message.success("success");
+      form.resetFields();
+    } catch (err) {
+      message.error("An error occurred while submitting the form.");
+      message.error("An error occurred while submitting the form.");
+    }
   };
 
   return (
     <div>
       <h1>Upload Rental Information</h1>
       <Form
+        form={form}
         layout="vertical"
         onFinish={onFinish}
         initialValues={{
