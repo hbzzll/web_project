@@ -6,7 +6,7 @@ import RentDetail from "../components/RentDetail/RenDetail";
 import Profile from "./Profile/Profile";
 import UserProfile from "./Profile/Userprofile/Userprofile";
 import Favourites from "./Profile/Favourites/Favourites";
-import Publish from "./Profile/Publish/Publish";
+import MyPublish from "./Profile/Publish/MyPublish";
 
 const HomePage = () => {
   return (
@@ -19,7 +19,7 @@ const HomePage = () => {
         <Route path="/Menu" element={<Profile />}>
           <Route path="Profile" element={<UserProfile />} />
           <Route path="Favourites" element={<Favourites />} />
-          <Route path="Publish" element={<Publish />} />
+          <Route path="MyPublish" element={<MyPublish />} />
         </Route>
       </Routes>
     </>

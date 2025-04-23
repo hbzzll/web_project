@@ -1,26 +1,54 @@
 import "./RentDetail.scss";
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 import Description from "./description/description";
 import Transition from "./img_transition/img_trainsition";
 import MapView from "../Mapview";
+import { useParams } from "react-router-dom";
+import { request } from "../../utils/request";
+
+interface HouseDetail {
+  availableFrom: string;
+  balconies: number;
+  bathrooms: number;
+  city: string;
+  detailedAddress: string;
+  email: string;
+  hasElevator: false;
+  price: number;
+  propertyType: string;
+  rooms: number;
+  size: number;
+  _id: string;
+}
 
 const RentDetail = () => {
+  const { id } = useParams(); //get id from url
+  const [info, setInfo] = useState<HouseDetail | any>({});
+
   const mapRef = useRef<HTMLDivElement | null>(null); //?
 
   const scrollToMap = () => {
     mapRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  const propertyInfo = [
-    { label: "Property type", value: "apartment" },
-    { label: "Rooms", value: "1" },
-    { label: "Size", value: "40 m²" },
-    { label: "Price", value: "2,867 kr" },
-    { label: "Rental period", value: "Unlimited" },
-    { label: "Available from", value: "ASAP" },
-    { label: "Pets allowed", value: "No" },
-    { label: "Price per m²", value: "72 kr" },
-  ];
+  const [propertyInfo, setPropertyInfo] = useState<
+    { label: string; value: string }[]
+  >([]);
+
+  useEffect(() => {
+    const fetchDetail = async () => {
+      const res = await request.get(`/api/house/${id}`);
+      setInfo(res);
+
+      const transformed = Object.entries(res).map(([key, value]) => ({
+        label: key,
+        value: String(value),
+      }));
+
+      setPropertyInfo(transformed);
+    };
+    fetchDetail();
+  }, [id]);
 
   const houseImages = [
     "https://images.unsplash.com/photo-1600585154340-be6161a56a0c", // 房子外景
@@ -39,7 +67,7 @@ const RentDetail = () => {
       <div className="container-detail">
         <div className="detail-info">
           <div>Add to favourites</div>
-          <div className="title">1 room apartment of 40 m² in Olofström</div>
+          <div className="title">{info.detailedAddress}</div>
           <div
             className="location"
             onClick={scrollToMap}

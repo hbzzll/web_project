@@ -1,8 +1,25 @@
+import { useEffect, useState } from "react";
 import Heading from "../../../components/Heading";
 import RentCard from "../../../components/RentCard/RentCard";
 import { list } from "../../../Data/data";
+import { request } from "../../../utils/request";
 import "./Recent.scss";
 const Recent = () => {
+  const [list, setList] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchRecent = async () => {
+      try {
+        const res = await request.get("/api/house/getrecent");
+        setList(res);
+      } catch (err) {
+        console.error("Error fetching recent properties", err);
+      }
+    };
+
+    fetchRecent();
+  }, []);
+
   return (
     <>
       <div className="recent padding">

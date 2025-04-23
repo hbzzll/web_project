@@ -11,9 +11,9 @@ import {
   Switch,
   message,
 } from "antd";
-import { request } from "../../../utils/request";
+import { request } from "../../../../utils/request";
 import { useSelector } from "react-redux";
-import { RootState } from "../../../store";
+import { RootState } from "../../../../store";
 
 const { Option } = Select;
 
@@ -41,7 +41,6 @@ const Publish = () => {
 
   return (
     <div>
-      <h1>Upload Rental Information</h1>
       <Form
         form={form}
         layout="vertical"

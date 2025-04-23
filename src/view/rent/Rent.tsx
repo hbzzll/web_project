@@ -1,11 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Slider } from "antd";
 import "./Rent.scss";
 import RentCard from "../../components/RentCard/RentCard";
-import { list } from "../../Data/data";
+// import { list } from "../../Data/data";
+import { request } from "../../utils/request";
 
 const Rent = () => {
   const [priceRange, setPriceRange] = useState<[number, number]>([20, 50]);
+  const [list, setList] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchRecent = async () => {
+      try {
+        const res = await request.get("/api/house/getall");
+        setList(res);
+      } catch (err) {
+        console.error("Error fetching recent properties", err);
+      }
+    };
+
+    fetchRecent();
+  }, []);
+
   const onChange = (value: number | number[]) => {
     console.log("onChange: ", value);
     if (Array.isArray(value)) {
