@@ -19,19 +19,18 @@ interface RentCardProps {
     price: string;
     propertyType: string;
   };
+  isFavorited?: boolean;
 }
 
-const RentCard = ({ data }: RentCardProps) => {
+const RentCard = ({ data, isFavorited = false }: RentCardProps) => {
   const dispatch = useAppDispatch();
   const { _id, cover, city, name, detailedAddress, price, propertyType } = data;
   const { token, profile } = useSelector((state: RootState) => state.user);
-  const [liked, setLiked] = useState(false);
+  const [liked, setLiked] = useState(isFavorited);
 
   useEffect(() => {
-    if (profile?.favourites?.includes(_id)) {
-      setLiked(true);
-    }
-  }, [profile.favourites, _id]);
+    setLiked(isFavorited);
+  }, [isFavorited]);
 
   const handleFavourite = async (e: React.MouseEvent) => {
     e.preventDefault();

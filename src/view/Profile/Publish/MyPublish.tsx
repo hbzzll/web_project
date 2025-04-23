@@ -3,11 +3,16 @@ import { Button, message } from "antd";
 import { AddPropertyModal } from "./PublishForm/AddPropertyModal";
 import RentCard from "../../../components/RentCard/RentCard";
 import { request } from "../../../utils/request";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../store";
 
 const MyPublish = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [list, setList] = useState([]);
+  const [list, setList] = useState<any[]>([]);
   const token = localStorage.getItem("token_key");
+  const favourites = useSelector(
+    (state: RootState) => state.user.profile.favourites
+  );
 
   useEffect(() => {
     const fetchPublish = async () => {
@@ -44,7 +49,11 @@ const MyPublish = () => {
         {list.map((item, index) => (
           <div>
             <div>Processed</div>
-            <RentCard key={index} data={item} />
+            <RentCard
+              key={index}
+              data={item}
+              isFavorited={favourites?.includes(item._id)}
+            />
             <Button className="edit">Edit</Button>
             <Button className="cancel">Cancel</Button>
           </div>

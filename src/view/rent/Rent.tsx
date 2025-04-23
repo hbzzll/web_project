@@ -4,11 +4,15 @@ import "./Rent.scss";
 import RentCard from "../../components/RentCard/RentCard";
 // import { list } from "../../Data/data";
 import { request } from "../../utils/request";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 
 const Rent = () => {
   const [priceRange, setPriceRange] = useState<[number, number]>([20, 50]);
   const [list, setList] = useState<any[]>([]);
-
+  const favourites = useSelector(
+    (state: RootState) => state.user.profile.favourites
+  );
   useEffect(() => {
     const fetchRecent = async () => {
       try {
@@ -78,7 +82,11 @@ const Rent = () => {
 
         <div className="house">
           {filterdata.map((item, index) => (
-            <RentCard key={index} data={item} />
+            <RentCard
+              key={index}
+              data={item}
+              isFavorited={favourites?.includes(item._id)}
+            />
           ))}
         </div>
       </div>
