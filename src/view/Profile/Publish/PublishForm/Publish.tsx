@@ -10,7 +10,9 @@ import {
   Col,
   Switch,
   message,
+  Modal,
 } from "antd";
+import { useState } from "react";
 import { request } from "../../../../utils/request";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../store";
@@ -21,9 +23,16 @@ const Publish = () => {
   const [form] = Form.useForm();
   const token = localStorage.getItem("token_key");
   const { email } = useSelector((state: RootState) => state.user);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [pendingValues, setPendingValues] = useState<any>(null);
 
   const onFinish = async (values: any) => {
-    const property = { ...values, email: email };
+    setPendingValues(values);
+    setShowConfirm(true);
+  };
+
+  const Postrequest = async () => {
+    const property = { ...pendingValues, email: email };
     try {
       const res = await request.post("/api/house/publish", property, {
         headers: {
@@ -36,6 +45,9 @@ const Publish = () => {
     } catch (err) {
       message.error("An error occurred while submitting the form.");
       message.error("An error occurred while submitting the form.");
+    } finally {
+      setShowConfirm(false);
+      setPendingValues(null);
     }
   };
 
@@ -183,6 +195,15 @@ const Publish = () => {
             Submit
           </Button>
         </Form.Item>
+
+        <Modal
+          title="Confirm Publish"
+          open={showConfirm}
+          onOk={Postrequest}
+          onCancel={() => setShowConfirm(false)}
+        >
+          Are you sure to publish this property?
+        </Modal>
       </Form>
     </div>
   );

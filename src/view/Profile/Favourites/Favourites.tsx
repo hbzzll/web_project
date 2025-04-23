@@ -1,22 +1,41 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Button, message } from "antd";
+import { AddPropertyModal } from "./PublishForm/AddPropertyModal";
+import RentCard from "../../../components/RentCard/RentCard";
+import { request } from "../../../utils/request";
 
 const Favourites = () => {
-  const favouriteHouses = [
-    { id: 1, name: "", location: "" },
-    { id: 2, name: "", location: "" },
-    { id: 3, name: "", location: "" },
-  ];
+  const [list, setList] = useState([]);
+  const token = localStorage.getItem("token_key");
+
+  useEffect(() => {
+    const fetchPublish = async () => {
+      try {
+        const res = await request.get("/api/favourites/my", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setList(res);
+      } catch (err) {
+        message.error("Failed to get favourites");
+        message.error("Failed to get favourites");
+      }
+    };
+
+    fetchPublish();
+  }, []);
 
   return (
     <>
-      <h1></h1>
-      <ul>
-        {favouriteHouses.map((house) => (
-          <li key={house.id}>
-            {house.name} - {house.location}
-          </li>
+      <div className="house">
+        {list.map((item, index) => (
+          <div>
+            <div>Processed</div>
+            <RentCard key={index} data={item} />
+          </div>
         ))}
-      </ul>
+      </div>
     </>
   );
 };

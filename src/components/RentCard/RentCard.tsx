@@ -1,6 +1,13 @@
 import "./RentCard.scss";
-import { list } from "../../Data/data";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { HeartOutlined, HeartFilled } from "@ant-design/icons";
+import { request } from "../../utils/request";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
+import { message } from "antd";
+import { useAppDispatch } from "../../store/hooks";
+import { updateFavourites } from "../../store/reducer"; // Adjust the path based on your project structure
 
 interface RentCardProps {
   data: {
@@ -15,7 +22,40 @@ interface RentCardProps {
 }
 
 const RentCard = ({ data }: RentCardProps) => {
+  const dispatch = useAppDispatch();
   const { _id, cover, city, name, detailedAddress, price, propertyType } = data;
+  const { token, profile } = useSelector((state: RootState) => state.user);
+  const [liked, setLiked] = useState(false);
+
+  useEffect(() => {
+    if (profile?.favourites?.includes(_id)) {
+      setLiked(true);
+    }
+  }, [profile.favourites, _id]);
+
+  const handleFavourite = async (e: React.MouseEvent) => {
+    e.preventDefault();
+
+    if (!token) {
+      return message.warning("Please login to add to favorites");
+    }
+
+    try {
+      setLiked(!liked);
+      const res = await request.post(
+        "/api/favourite/trigger",
+        {
+          houseId: _id,
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      dispatch(updateFavourites(res.favourites));
+    } catch (err) {
+      message.error("Failed to update favorite");
+      setLiked(liked);
+    }
+  };
+
   return (
     <>
       <div className="content grid3">
@@ -34,7 +74,13 @@ const RentCard = ({ data }: RentCardProps) => {
               >
                 {city}
               </span>
-              <i className="fa fa-heart"></i> //爱心
+              <span className="heart-icon" onClick={handleFavourite}>
+                {liked ? (
+                  <HeartFilled style={{ color: "red", fontSize: "18px" }} />
+                ) : (
+                  <HeartOutlined style={{ fontSize: "18px" }} />
+                )}
+              </span>
             </div>
             <h4>{name}</h4>
             <p>
