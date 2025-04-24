@@ -5,6 +5,9 @@ import Transition from "./img_transition/img_trainsition";
 import MapView from "../Mapview";
 import { useParams } from "react-router-dom";
 import { request } from "../../utils/request";
+import { Modal } from "antd";
+import ContactLandlord from "./contact/contact";
+import LandlordInfo from "./landlordinfo/landlordinfo";
 
 interface HouseDetail {
   availableFrom: string;
@@ -24,6 +27,7 @@ interface HouseDetail {
 const RentDetail = () => {
   const { id } = useParams(); //get id from url
   const [info, setInfo] = useState<HouseDetail | any>({});
+  const [isOpen, setisOpen] = useState(false);
 
   const mapRef = useRef<HTMLDivElement | null>(null); //?
 
@@ -93,12 +97,19 @@ const RentDetail = () => {
         <div className="contact-info">
           <div className="contact">
             <div>Monthly rate</div>
-            <button className="contact-landlord">Contact landlord</button>
+            {id && <ContactLandlord houseId={id} />}
           </div>
 
+          {/* <Modal
+            title="Upload Rental Information"
+            open={isOpen}
+            onCancel={() => setisOpen(false)}
+            centered
+          ></Modal> */}
+
           <div className="landlord">
-            landlord information
-            <div>lanlord name / age / anything</div>
+            <h2>Landlord Information</h2>
+            <LandlordInfo houseId={id} />
           </div>
         </div>
       </div>

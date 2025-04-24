@@ -9,6 +9,7 @@ interface UserProfile {
   gender?: string;
   avatar?: string;
   favourites?: [any];
+  process?: [any];
 }
 
 interface UserState {
@@ -44,6 +45,9 @@ const usetStore = createSlice({
     updateFavourites(state, action) {
       state.profile.favourites = action.payload;
     },
+    updateProcess(state, action) {
+      state.profile.process = action.payload;
+    },
     logout(state) {
       state.token = "";
       state.name = "";
@@ -55,7 +59,7 @@ const usetStore = createSlice({
   },
 });
 
-const { setUser, logout, updateFavourites } = usetStore.actions;
+const { setUser, logout, updateFavourites, updateProcess } = usetStore.actions;
 
 const userReducer = usetStore.reducer;
 
@@ -114,6 +118,13 @@ const fetchLogin = (loginForm: LoginForm) => {
   };
 };
 
-export { fetchSignup, fetchLogin, setUser, logout, updateFavourites };
+export {
+  fetchSignup,
+  fetchLogin,
+  setUser,
+  logout,
+  updateFavourites,
+  updateProcess,
+};
 
 export default userReducer;
