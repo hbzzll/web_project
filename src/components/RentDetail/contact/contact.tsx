@@ -1,7 +1,7 @@
 import { Button, message } from "antd";
 import { useSelector, useDispatch } from "react-redux";
-import { request } from "../../../utils/request";
-import { updateProcess } from "../../../store/reducer"; // 你可以创建这个 action
+import { request } from "@/utils/request";
+import { updateProcess } from "@/store/reducer"; // 你可以创建这个 action
 
 interface Props {
   houseId: string;

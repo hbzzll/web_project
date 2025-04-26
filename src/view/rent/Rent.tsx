@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Slider } from "antd";
 import "./Rent.scss";
-import RentCard from "../../components/RentCard/RentCard";
-// import { list } from "../../Data/data";
-import { request } from "../../utils/request";
+import RentCard from "@/components/RentCard/RentCard";
+import { request } from "@/utils/request";
 import { useSelector } from "react-redux";
-import { RootState } from "../../store";
+import { RootState } from "@/store";
 
 const Rent = () => {
   const [priceRange, setPriceRange] = useState<[number, number]>([20, 50]);

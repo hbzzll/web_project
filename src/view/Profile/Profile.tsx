@@ -31,10 +31,9 @@ function getItem(
 
 const items: MenuItem[] = [
   getItem("User", "/Profile", <UserOutlined />),
-  getItem("Process", "/Process", <DesktopOutlined />),
+  getItem("Transaction", "/Transaction", <DesktopOutlined />),
   getItem("Favourites", "/Favourites", <PieChartOutlined />),
 
-  // getItem("Publish", "/publish", <FileOutlined />),
   getItem("Publish", "/mypublish", <TeamOutlined />),
   getItem("Log out", "/logout", <FileOutlined />),
 ];

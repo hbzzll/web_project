@@ -1,9 +1,9 @@
-import RentCard from "../../../../components/RentCard/RentCard";
+import RentCard from "@/components/RentCard/RentCard";
 import React, { useEffect, useState } from "react";
-import { request } from "../../../../utils/request";
+import { request } from "@/utils/request";
 import { Button, message, Modal } from "antd";
 import { useSelector } from "react-redux";
-import { RootState } from "../../../../store";
+import { RootState } from "@/store";
 import EditForm from "./EditForm";
 
 const Compo_card = () => {

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Button, message } from "antd";
-import RentCard from "../../../components/RentCard/RentCard";
-import { request } from "../../../utils/request";
+import RentCard from "@/components/RentCard/RentCard";
+import { request } from "@/utils/request";
 import { useSelector } from "react-redux";
-import { RootState } from "../../../store";
+import { RootState } from "@/store";
 
 const Favourites = () => {
   const [list, setList] = useState<any[]>([]);
@@ -34,10 +34,9 @@ const Favourites = () => {
     <>
       <div className="house">
         {list.map((item, index) => (
-          <div>
+          <div key={index}>
             <div>Processed</div>
             <RentCard
-              key={index}
               data={item}
               isFavorited={favourites?.includes(item._id)}
             />

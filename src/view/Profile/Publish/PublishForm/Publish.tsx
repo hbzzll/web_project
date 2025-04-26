@@ -13,9 +13,9 @@ import {
   Modal,
 } from "antd";
 import { useState } from "react";
-import { request } from "../../../../utils/request";
+import { request } from "@/utils/request";
 import { useSelector } from "react-redux";
-import { RootState } from "../../../../store";
+import { RootState } from "@/store";
 
 const { Option } = Select;
 

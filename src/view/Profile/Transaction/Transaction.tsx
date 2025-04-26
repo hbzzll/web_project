@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Button, message } from "antd";
-import RentCard from "../../../components/RentCard/RentCard";
-import { request } from "../../../utils/request";
+import RentCard from "@/components/RentCard/RentCard";
+import { request } from "@/utils/request";
 import { useSelector } from "react-redux";
-import { RootState } from "../../../store";
+import { RootState } from "@/store";
 
-const ProcessingHouses = () => {
+const Transaction = () => {
   const [list, setList] = useState<any[]>([]);
   const token = localStorage.getItem("token_key");
   const process = useSelector((state: RootState) => state.user.profile.process);
@@ -46,4 +46,4 @@ const ProcessingHouses = () => {
   );
 };
 
-export default ProcessingHouses;
+export default Transaction;

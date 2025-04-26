@@ -4,7 +4,7 @@ import Description from "./description/description";
 import Transition from "./img_transition/img_trainsition";
 import MapView from "../Mapview";
 import { useParams } from "react-router-dom";
-import { request } from "../../utils/request";
+import { request } from "@/utils/request";
 import { Modal } from "antd";
 import ContactLandlord from "./contact/contact";
 import LandlordInfo from "./landlordinfo/landlordinfo";

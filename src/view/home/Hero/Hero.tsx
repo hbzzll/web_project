@@ -1,6 +1,6 @@
 import "./Hero.scss";
 import styles from "./Hero.scss";
-import Heading from "../../../components/Heading";
+import Heading from "@/components/Heading";
 
 const Hero = () => {
   return (

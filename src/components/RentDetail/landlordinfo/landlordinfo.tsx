@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { request } from "../../../utils/request";
+import { request } from "@/utils/request";
 import "./landlordinfo.scss";
 
 interface Props {

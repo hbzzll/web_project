@@ -2,12 +2,12 @@ import React from "react";
 import { useState } from "react";
 import "./Header.scss";
 import { Link } from "react-router-dom";
-import { navlist } from "../../Data/data";
+import { navlist } from "@/Data/data";
 import LoginModal from "../Login/login";
 import { useSelector } from "react-redux";
-import { RootState } from "../../store";
-import { logout } from "../../store/reducer";
-import { useAppDispatch } from "../../store/hooks";
+import { RootState } from "@/store";
+import { logout } from "@/store/reducer";
+import { useAppDispatch } from "@/store/hooks";
 import UserMenu from "../Login/Usermenu/Usermenu";
 import { Button } from "antd";
 

@@ -7,7 +7,7 @@ import Profile from "./Profile/Profile";
 import UserProfile from "./Profile/Userprofile/Userprofile";
 import Favourites from "./Profile/Favourites/Favourites";
 import MyPublish from "./Profile/Publish/MyPublish";
-import Process from "./Profile/Process/Process";
+import Transaction from "./Profile/Transaction/Transaction";
 
 const HomePage = () => {
   return (
@@ -19,7 +19,7 @@ const HomePage = () => {
         <Route path="/list/:id" element={<RentDetail />} />
         <Route path="/Menu" element={<Profile />}>
           <Route path="Profile" element={<UserProfile />} />
-          <Route path="Process" element={<Process />} />
+          <Route path="Transaction" element={<Transaction />} />
           <Route path="Favourites" element={<Favourites />} />
           <Route path="MyPublish" element={<MyPublish />} />
         </Route>

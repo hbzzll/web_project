@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import Heading from "../../../components/Heading";
-import RentCard from "../../../components/RentCard/RentCard";
-import { list } from "../../../Data/data";
-import { request } from "../../../utils/request";
+import Heading from "@/components/Heading";
+import RentCard from "@/components/RentCard/RentCard";
+import { list } from "@/Data/data";
+import { request } from "@/utils/request";
 import "./Recent.scss";
 import { useSelector } from "react-redux";
-import { RootState } from "../../../store";
+import { RootState } from "@/store";
 
 const Recent = () => {
   const [list, setList] = useState<any[]>([]);

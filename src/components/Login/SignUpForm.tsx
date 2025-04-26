@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./interface.scss";
-import { fetchSignup } from "../../store/reducer";
-import { useAppDispatch } from "../../store/hooks";
+import { fetchSignup } from "@/store/reducer";
+import { useAppDispatch } from "@/store/hooks";
 
 const SignUpForm = ({
   onSwitch,

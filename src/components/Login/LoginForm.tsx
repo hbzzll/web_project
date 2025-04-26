@@ -1,7 +1,7 @@
 import "./interface.scss";
 import { useState } from "react";
-import { useAppDispatch } from "../../store/hooks";
-import { fetchLogin } from "../../store/reducer";
+import { useAppDispatch } from "@/store/hooks";
+import { fetchLogin } from "@/store/reducer";
 import { useNavigate } from "react-router-dom";
 
 const LoginForm = ({

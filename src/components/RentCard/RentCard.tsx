@@ -2,12 +2,12 @@ import "./RentCard.scss";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { HeartOutlined, HeartFilled } from "@ant-design/icons";
-import { request } from "../../utils/request";
+import { request } from "@/utils/request";
 import { useSelector } from "react-redux";
-import { RootState } from "../../store";
+import { RootState } from "@/store";
 import { message } from "antd";
-import { useAppDispatch } from "../../store/hooks";
-import { updateFavourites } from "../../store/reducer"; // Adjust the path based on your project structure
+import { useAppDispatch } from "@/store/hooks";
+import { updateFavourites } from "@/store/reducer"; // Adjust the path based on your project structure
 
 interface RentCardProps {
   data: {

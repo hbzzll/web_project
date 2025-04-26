@@ -1,9 +1,9 @@
 import { Button, Form, Input, Space, Radio, Row, Col, message } from "antd";
 import { useEffect, useState } from "react";
 import AvatarUpdate from "./update_avatar";
-import { request } from "../../../utils/request";
+import { request } from "@/utils/request";
 import { useSelector } from "react-redux";
-import { RootState } from "../../../store";
+import { RootState } from "@/store";
 
 const UserProfile = () => {
   const [form] = Form.useForm();
