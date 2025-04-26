@@ -57,7 +57,7 @@ const RentCard = ({ data, isFavorited = false }: RentCardProps) => {
 
   return (
     <>
-      <div className="content grid3">
+      <div className="grid3">
         <Link to={`/list/${_id}`} className="box shadow">
           <div className="img">
             <img src="../images/list/p-7.png" alt="" />

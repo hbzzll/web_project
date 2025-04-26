@@ -100,16 +100,9 @@ const RentDetail = () => {
             {id && <ContactLandlord houseId={id} />}
           </div>
 
-          {/* <Modal
-            title="Upload Rental Information"
-            open={isOpen}
-            onCancel={() => setisOpen(false)}
-            centered
-          ></Modal> */}
-
           <div className="landlord">
             <h2>Landlord Information</h2>
-            <LandlordInfo houseId={id} />
+            {id && <LandlordInfo houseId={id} />}
           </div>
         </div>
       </div>

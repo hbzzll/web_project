@@ -1,59 +1,56 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
+  Modal,
   Form,
   Input,
   InputNumber,
-  DatePicker,
-  Button,
+  Switch,
   Select,
+  DatePicker,
   Row,
   Col,
-  Switch,
-  message,
-  Modal,
+  Button,
 } from "antd";
-import { useState } from "react";
-import { request } from "../../../../utils/request";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../../store";
-
+import moment from "moment";
 const { Option } = Select;
 
-const Publish = () => {
+interface Props {
+  open: boolean;
+  onCancel: () => void;
+  initialData: any;
+  onSave: (data: any) => void;
+}
+
+const EditForm: React.FC<Props> = ({ open, onCancel, initialData, onSave }) => {
   const [form] = Form.useForm();
-  const token = localStorage.getItem("token_key");
-  const { email } = useSelector((state: RootState) => state.user);
-  const [showConfirm, setShowConfirm] = useState(false);
-  const [pendingValues, setPendingValues] = useState<any>(null);
 
-  const onFinish = async (values: any) => {
-    setPendingValues(values);
-    setShowConfirm(true);
-  };
-
-  const Postrequest = async () => {
-    const property = { ...pendingValues, email: email };
-    try {
-      const res = await request.post("/api/house/publish", property, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+  useEffect(() => {
+    if (open && initialData) {
+      form.setFieldsValue({
+        ...initialData,
+        availableFrom: initialData.availableFrom //translate string to moment format
+          ? moment(initialData.availableFrom)
+          : undefined,
       });
-      message.success("success");
-      message.success("success");
-      form.resetFields();
-    } catch (err) {
-      message.error("An error occurred while submitting the form.");
-      message.error("An error occurred while submitting the form.");
-    } finally {
-      setShowConfirm(false);
-      setPendingValues(null);
     }
-  };
+  }, [open, initialData]);
 
+  const handleSubmit = async () => {
+    const values = await form.validateFields();
+    onSave({ ...initialData, ...values });
+  };
   return (
-    <div>
-      <Form form={form} layout="vertical" onFinish={onFinish}>
+    <Modal
+      title="Edit Property"
+      open={open}
+      onCancel={() => {
+        form.resetFields();
+        onCancel();
+      }}
+      onOk={handleSubmit}
+      okText="Save"
+    >
+      <Form form={form} layout="vertical">
         <Row gutter={16}>
           <Col span={12}>
             <Form.Item
@@ -178,24 +175,9 @@ const Publish = () => {
             </Form.Item>
           </Col>
         </Row>
-
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item>
-
-        <Modal
-          title="Confirm Publish"
-          open={showConfirm}
-          onOk={Postrequest}
-          onCancel={() => setShowConfirm(false)}
-        >
-          Are you sure to publish this property?
-        </Modal>
       </Form>
-    </div>
+    </Modal>
   );
 };
 
-export default Publish;
+export default EditForm;

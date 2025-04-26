@@ -1,36 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Button, message } from "antd";
 import { AddPropertyModal } from "./PublishForm/AddPropertyModal";
-import RentCard from "../../../components/RentCard/RentCard";
-import { request } from "../../../utils/request";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../store";
+import "./MyPublish.scss";
+import Compo_card from "./Compo_card/Compo_card";
 
 const MyPublish = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [list, setList] = useState<any[]>([]);
-  const token = localStorage.getItem("token_key");
-  const favourites = useSelector(
-    (state: RootState) => state.user.profile.favourites
-  );
-
-  useEffect(() => {
-    const fetchPublish = async () => {
-      try {
-        const res = await request.get("/api/publishHouse/my", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setList(res);
-      } catch (err) {
-        message.error("Failed to fetch your published properties");
-        message.error("Failed to fetch your published properties");
-      }
-    };
-
-    fetchPublish();
-  }, []);
 
   return (
     <div style={{ padding: 24 }}>
@@ -45,20 +20,8 @@ const MyPublish = () => {
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       />
-      <div className="house">
-        {list.map((item, index) => (
-          <div>
-            <div>Processed</div>
-            <RentCard
-              key={index}
-              data={item}
-              isFavorited={favourites?.includes(item._id)}
-            />
-            <Button className="edit">Edit</Button>
-            <Button className="cancel">Cancel</Button>
-          </div>
-        ))}
-      </div>
+
+      <Compo_card />
     </div>
   );
 };
