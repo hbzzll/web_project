@@ -23,15 +23,7 @@ const UserProfile = () => {
       const profile = { ...values, avatar: previewUrl };
       const token = localStorage.getItem("token_key");
 
-      const res = await request.put(
-        "/api/user/update",
-        { profile },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await request.put("/api/user/update", { profile });
       message.success("success");
       setIsEditing(false);
     } catch (err) {

@@ -15,11 +15,7 @@ const Favourites = () => {
   useEffect(() => {
     const fetchPublish = async () => {
       try {
-        const res = await request.get("/api/favourites/my", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await request.get("/api/user/favourites/my");
         setList(res);
       } catch (err) {
         message.error("Failed to get favourites");

@@ -8,6 +8,7 @@ import UserProfile from "./Profile/Userprofile/Userprofile";
 import Favourites from "./Profile/Favourites/Favourites";
 import MyPublish from "./Profile/Publish/MyPublish";
 import Transaction from "./Profile/Transaction/Transaction";
+import PrivateRoute from "@/router";
 
 const HomePage = () => {
   return (
@@ -17,7 +18,14 @@ const HomePage = () => {
         <Route path="/" element={<Home />} />
         <Route path="/rent" element={<Rent />} />
         <Route path="/list/:id" element={<RentDetail />} />
-        <Route path="/Menu" element={<Profile />}>
+        <Route
+          path="/Menu"
+          element={
+            <PrivateRoute>
+              <Profile />
+            </PrivateRoute>
+          }
+        >
           <Route path="Profile" element={<UserProfile />} />
           <Route path="Transaction" element={<Transaction />} />
           <Route path="Favourites" element={<Favourites />} />

@@ -36,18 +36,15 @@ const RentCard = ({ data, isFavorited = false }: RentCardProps) => {
     e.preventDefault();
 
     if (!token) {
+      message.warning("Please login to add to favorites");
       return message.warning("Please login to add to favorites");
     }
 
     try {
       setLiked(!liked);
-      const res = await request.post(
-        "/api/favourite/trigger",
-        {
-          houseId: _id,
-        },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const res = await request.post("/api/user/favourite/trigger", {
+        houseId: _id,
+      });
       dispatch(updateFavourites(res.favourites));
     } catch (err) {
       message.error("Failed to update favorite");

@@ -16,11 +16,7 @@ const Transaction = () => {
   useEffect(() => {
     const fetchProcess = async () => {
       try {
-        const res = await request.get("/api/process/my", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await request.get("/api/user/process/my");
         setList(res); // 这里假设后端返回的是房屋列表数组
       } catch (err) {
         message.error("Failed to get processing houses");
@@ -33,7 +29,7 @@ const Transaction = () => {
   return (
     <div className="house">
       {list.map((item, index) => (
-        <div>
+        <div key={index}>
           <div>Processed</div>
           <RentCard
             key={index}

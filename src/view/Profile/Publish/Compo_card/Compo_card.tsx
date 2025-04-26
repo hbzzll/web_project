@@ -18,11 +18,7 @@ const Compo_card = () => {
   useEffect(() => {
     const fetchPublish = async () => {
       try {
-        const res = await request.get("/api/publishHouse/my", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await request.get("/api/user/publishHouse/my");
         setList(res);
       } catch (err) {
         message.error("Failed to fetch your published properties");
@@ -42,11 +38,7 @@ const Compo_card = () => {
       cancelText: "Cancel",
       onOk: async () => {
         try {
-          await request.delete(`/api/house/delete/${houseId}`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
+          await request.delete(`/api/user/house/delete/${houseId}`);
           message.success("Property deleted successfully");
           message.success("Property deleted successfully");
 
@@ -66,11 +58,8 @@ const Compo_card = () => {
   const handleSave = async (updatedItem: any) => {
     try {
       const res = await request.put(
-        `/api/house/publish/update/${updatedItem._id}`,
-        updatedItem,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+        `/api/user/house/publish/update/${updatedItem._id}`,
+        updatedItem
       );
       message.success("Updated successfully");
       message.success("Updated successfully");
@@ -87,7 +76,7 @@ const Compo_card = () => {
   return (
     <div className="house">
       {list.map((item, index) => (
-        <div className="rentcard-wrapper">
+        <div className="rentcard-wrapper" key={index}>
           <div className="status-tag">Processed</div>
 
           <RentCard data={item} isFavorited={favourites?.includes(item._id)} />

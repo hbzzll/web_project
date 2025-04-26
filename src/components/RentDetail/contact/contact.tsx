@@ -16,14 +16,10 @@ const ContactLandlord = ({ houseId, onSuccess }: Props) => {
     try {
       if (!token) {
         message.warning("Please login first.");
-        return;
+        return message.warning("Please login first.");
       }
 
-      const res = await request.post(
-        "/api/process/add",
-        { houseId },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const res = await request.post("/api/user/process/add", { houseId });
       message.success("Added to your processing list!");
       message.success("Added to your processing list!");
       dispatch(updateProcess(res.process)); // 同步 redux

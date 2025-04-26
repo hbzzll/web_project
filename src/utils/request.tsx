@@ -7,6 +7,19 @@ const request = axios.create({
 
 request.interceptors.request.use(
   (config) => {
+    const authKeywords = ["/user"];
+    const url = config.url || "";
+    const needAuth = authKeywords.some((keyword) => url.includes(keyword));
+
+    if (needAuth) {
+      const token = localStorage.getItem("token_key");
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      } else {
+        delete config.headers.Authorization;
+      }
+    }
+
     return config;
   },
   (error) => {
@@ -19,11 +32,19 @@ request.interceptors.response.use(
     return response.data;
   },
   (error) => {
+    if (error.response) {
+      const { status } = error.response;
+
+      if (status === 401) {
+        window.location.href = "/";
+      }
+    }
     return Promise.reject(error);
   }
 );
 
 export { request };
+
 // axios.interceptors.request.use((config) => {
 //   const passURL = ["/api/login", "/api/register"];
 //   if (passURL.includes(config.url)) return config;

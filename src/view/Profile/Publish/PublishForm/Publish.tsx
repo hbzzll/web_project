@@ -34,11 +34,7 @@ const Publish = () => {
   const Postrequest = async () => {
     const property = { ...pendingValues, email: email };
     try {
-      const res = await request.post("/api/house/publish", property, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await request.post("/api/user/house/publish", property);
       message.success("success");
       message.success("success");
       form.resetFields();

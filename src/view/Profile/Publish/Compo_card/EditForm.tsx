@@ -43,12 +43,12 @@ const EditForm: React.FC<Props> = ({ open, onCancel, initialData, onSave }) => {
     <Modal
       title="Edit Property"
       open={open}
+      onOk={handleSubmit}
+      okText="Save"
       onCancel={() => {
         form.resetFields();
         onCancel();
       }}
-      onOk={handleSubmit}
-      okText="Save"
     >
       <Form form={form} layout="vertical">
         <Row gutter={16}>

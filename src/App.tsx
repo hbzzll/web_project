@@ -13,11 +13,7 @@ function App() {
 
     if (token) {
       request
-        .get("/api/user", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
+        .get("/api/user")
         .then((res) => {
           dispatch(
             setUser({
