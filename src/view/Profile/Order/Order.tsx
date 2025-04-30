@@ -1,6 +1,7 @@
 import { Table, Button, Tag, message } from "antd";
 import type { TableProps } from "antd";
 import { useEffect, useState } from "react";
+import moment from "moment";
 import { request } from "@/utils/request";
 
 interface DataType {
@@ -13,6 +14,7 @@ interface DataType {
   houseId: string;
   orderId: string;
   status: number;
+  updatedAt: any;
 }
 
 const statusMap: { [key: number]: { label: string; color: string } } = {
@@ -27,7 +29,7 @@ const TransactionTable = () => {
 
   const fetchHouseinfo = async () => {
     try {
-      const res = await request.get("/api/user/transaction/my");
+      const res = await request.get("/api/user/property/order");
       setList(res);
     } catch (err) {
       message.error("Failed to fetch transaction data");
@@ -38,53 +40,6 @@ const TransactionTable = () => {
   useEffect(() => {
     fetchHouseinfo();
   }, []);
-
-  const handleCancelContact = async (houseId: string) => {
-    try {
-      await request.delete(`/api/user/house/progress/delete/${houseId}`);
-      message.success("Contact cancelled successfully");
-      setList((prev) => prev.filter((item) => item.houseId !== houseId));
-    } catch (err) {
-      message.error("failed to cancel contact");
-    }
-  };
-
-  const handleRequestTermination = async (orderId: string) => {
-    try {
-      const updated = await request.put(
-        "/api/user/transaction/request/terminate",
-        {
-          orderId,
-        }
-      );
-
-      message.success("Termination request sent successfully");
-      setList((prev) =>
-        prev.map((item) =>
-          item.orderId === orderId ? { ...item, status: updated.status } : item
-        )
-      );
-    } catch (err) {
-      message.error("Failed to send termination request");
-      message.error("Failed to send termination request");
-    }
-  };
-
-  const handleCancelRequest = async (orderId: string) => {
-    try {
-      const updated = await request.put("/api/user/house/request/cancel", {
-        orderId,
-      });
-      message.success("Request cancelled successfully");
-      setList((prev) =>
-        prev.map((item) =>
-          item.orderId === orderId ? { ...item, status: updated.status } : item
-        )
-      );
-    } catch (err) {
-      message.error("failed to cancel contact");
-    }
-  };
 
   const columns: TableProps<DataType>["columns"] = [
     {
@@ -143,38 +98,12 @@ const TransactionTable = () => {
       },
     },
     {
-      title: "Action",
-      key: "action",
+      title: "Date",
+      dataIndex: "updateAt",
+      key: "date",
       render: (text, record) => {
-        if (record.status === 1) {
-          return (
-            <Button
-              color="primary"
-              variant="outlined"
-              onClick={() => handleCancelContact(record.houseId)}
-            >
-              Cancel Contact
-            </Button>
-          );
-        }
-        if (record.status === 2) {
-          return (
-            <Button
-              type="primary"
-              onClick={() => handleRequestTermination(record.orderId)}
-            >
-              Request Termination
-            </Button>
-          );
-        }
-        if (record.status === 3) {
-          return (
-            <Button danger onClick={() => handleCancelRequest(record.orderId)}>
-              Cancel request
-            </Button>
-          );
-        }
-        return null;
+        console.log("record.updateAt", record.updatedAt);
+        return <div>{moment(record.updatedAt).format("YYYY-MM-DD")}</div>;
       },
     },
   ];

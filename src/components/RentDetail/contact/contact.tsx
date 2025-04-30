@@ -19,10 +19,10 @@ const ContactLandlord = ({ houseId, onSuccess }: Props) => {
         return message.warning("Please login first.");
       }
 
-      const res = await request.post("/api/user/process/add", { houseId });
+      await request.post("/api/user/process/add", { houseId });
       message.success("Added to your processing list!");
       message.success("Added to your processing list!");
-      dispatch(updateProcess(res.process)); // 同步 redux
+      // dispatch(updateProcess(res.process)); // 同步 redux
 
       //   if (onSuccess) onSuccess();
     } catch (err) {

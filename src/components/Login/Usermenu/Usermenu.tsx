@@ -1,11 +1,11 @@
 import { Dropdown, Avatar, Menu, Space } from "antd";
+import { Link } from "react-router-dom";
 import {
   UserOutlined,
   LogoutOutlined,
   ProfileOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { Color } from "antd/es/color-picker";
 
 const UserMenu = ({ onLogout }: { onLogout: () => void }) => {
   const navigate = useNavigate();
@@ -24,9 +24,12 @@ const UserMenu = ({ onLogout }: { onLogout: () => void }) => {
     {
       key: "logout",
       label: (
-        <span style={{ fontSize: 16, padding: "5px 10px", display: "block" }}>
+        <Link
+          to="/"
+          style={{ fontSize: 16, padding: "5px 10px", display: "block" }}
+        >
           Log out
-        </span>
+        </Link>
       ),
       icon: <LogoutOutlined />,
       onClick: onLogout,

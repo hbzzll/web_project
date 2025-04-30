@@ -1,34 +1,31 @@
-import RentCard from "@/components/RentCard/RentCard";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Dispatch, SetStateAction } from "react";
 import { request } from "@/utils/request";
-import { Button, message, Modal } from "antd";
+import { Button, message, Modal, Divider } from "antd";
+import { UserOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import EditForm from "./EditForm";
+import StatusCard from "@/components/RentCard/StatusCard";
+import ContractModal from "./ContractModal";
 
-const Compo_card = () => {
-  const [list, setList] = useState<any[]>([]);
+interface Props {
+  list: any[];
+  setList: Dispatch<SetStateAction<any[]>>;
+}
+
+const Compo_card: React.FC<Props> = ({ list, setList }) => {
+  const [contactOpen, setContactOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState<string>("");
   const [selectedItem, setSelectedItme] = useState<any>(null);
-  const token = localStorage.getItem("token_key");
   const favourites = useSelector(
     (state: RootState) => state.user.profile.favourites
   );
 
-  useEffect(() => {
-    const fetchPublish = async () => {
-      try {
-        const res = await request.get("/api/user/publishHouse/my");
-        setList(res);
-      } catch (err) {
-        message.error("Failed to fetch your published properties");
-        message.error("Failed to fetch your published properties");
-      }
-    };
+  const otherList = list.filter((item) => item.status !== 3);
+  const rentedList = list.filter((item) => item.status === 3);
 
-    fetchPublish();
-  }, []);
-
+  //Cancel operation
   const handleCancel = (houseId: string) => {
     Modal.confirm({
       title: "Are you sure to delete this property?",
@@ -50,6 +47,7 @@ const Compo_card = () => {
     });
   };
 
+  //Edit Modal
   const handleEdit = (item: any) => {
     setSelectedItme(item);
     setEditOpen(true);
@@ -73,24 +71,102 @@ const Compo_card = () => {
     }
   };
 
+  //Contact User Modal
+  const handleOpenUserList = (houseId: string) => {
+    setSelectedId(houseId);
+    setContactOpen(true);
+  };
+
+  const handleReleaseContract = (houseId: string) => {
+    Modal.confirm({
+      title: "Confirm Release",
+      content: "Do you want to approve or reject the termination request?",
+      okText: "Approve Termination",
+      cancelText: "Reject Request",
+      onOk: async () => {
+        try {
+          await request.post("/api/user/contract/termination/approve", {
+            houseId,
+          });
+          message.success("Contract terminated successfully");
+          setList((prev) =>
+            prev.map((item) =>
+              item._id === houseId ? { ...item, status: 2 } : item
+            )
+          );
+        } catch (err) {
+          message.error("Failed to terminate contract");
+        }
+      },
+      onCancel: async () => {
+        try {
+          await request.post("/api/user/contract/termination/reject", {
+            houseId,
+          });
+          message.success("Termination request rejected");
+          setList((prev) =>
+            prev.map((item) =>
+              item._id === houseId
+                ? { ...item, transactionStatus: "rented" }
+                : item
+            )
+          );
+        } catch (err) {
+          message.error("Failed to reject termination request");
+        }
+      },
+    });
+  };
+
   return (
-    <div className="house">
-      {list.map((item, index) => (
-        <div className="rentcard-wrapper" key={index}>
-          <div className="status-tag">Processed</div>
+    <>
+      <Divider>My Houses</Divider>
+      <div className="house">
+        {otherList.map((item, index) => (
+          <div className="rentcard-wrapper" key={index}>
+            <StatusCard
+              data={item}
+              isFavorited={favourites?.includes(item._id)}
+            />
 
-          <RentCard data={item} isFavorited={favourites?.includes(item._id)} />
-
-          <div className="card-actions">
-            <Button type="primary" onClick={() => handleEdit(item)}>
-              Edit
-            </Button>
-            <Button danger onClick={() => handleCancel(item._id)}>
-              Cancel
-            </Button>
+            <div className="card-actions">
+              <Button type="primary" onClick={() => handleEdit(item)}>
+                Edit
+              </Button>
+              <Button danger onClick={() => handleCancel(item._id)}>
+                Cancel
+              </Button>
+              <Button
+                icon={<UserOutlined />}
+                onClick={() => handleOpenUserList(item._id)}
+              />
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
+
+      {rentedList.length > 0 && <Divider>Rented Houses</Divider>}
+
+      <div className="house">
+        {rentedList.map((item, index) => (
+          <div className="rentcard-wrapper" key={index}>
+            <StatusCard
+              data={item}
+              isFavorited={favourites?.includes(item._id)}
+            />
+
+            <div className="card-actions">
+              <Button
+                danger
+                disabled={item.transactionStatus !== 3}
+                onClick={() => handleReleaseContract(item._id)}
+              >
+                Release Contract
+              </Button>
+            </div>
+          </div>
+        ))}
+      </div>
 
       <EditForm
         open={editOpen}
@@ -98,7 +174,14 @@ const Compo_card = () => {
         onCancel={() => setEditOpen(false)}
         onSave={handleSave}
       />
-    </div>
+
+      <ContractModal
+        open={contactOpen}
+        houseId={selectedId!}
+        onClose={() => setContactOpen(false)}
+        // onContractConfirmed={refreshTransactions}
+      />
+    </>
   );
 };
 

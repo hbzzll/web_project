@@ -7,7 +7,8 @@ import Profile from "./Profile/Profile";
 import UserProfile from "./Profile/Userprofile/Userprofile";
 import Favourites from "./Profile/Favourites/Favourites";
 import MyPublish from "./Profile/Publish/MyPublish";
-import Transaction from "./Profile/Transaction/Transaction";
+import TransactionTable from "./Profile/Transaction/Transaction";
+import Order from "./Profile/Order/Order";
 import PrivateRoute from "@/router";
 
 const HomePage = () => {
@@ -27,9 +28,10 @@ const HomePage = () => {
           }
         >
           <Route path="Profile" element={<UserProfile />} />
-          <Route path="Transaction" element={<Transaction />} />
+          <Route path="Transaction" element={<TransactionTable />} />
           <Route path="Favourites" element={<Favourites />} />
           <Route path="MyPublish" element={<MyPublish />} />
+          <Route path="Order" element={<Order />} />
         </Route>
       </Routes>
     </>

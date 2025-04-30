@@ -34,7 +34,10 @@ const items: MenuItem[] = [
   getItem("Transaction", "/Transaction", <DesktopOutlined />),
   getItem("Favourites", "/Favourites", <PieChartOutlined />),
 
-  getItem("Publish", "/mypublish", <TeamOutlined />),
+  getItem("Property", "sub", <TeamOutlined />, [
+    getItem("Publish", "/MyPublish", <TeamOutlined />),
+    getItem("Order", "/Order", <TeamOutlined />),
+  ]),
   getItem("Log out", "/logout", <FileOutlined />),
 ];
 

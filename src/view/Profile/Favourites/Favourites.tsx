@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, message } from "antd";
-import RentCard from "@/components/RentCard/RentCard";
+import StatusCard from "@/components/RentCard/StatusCard";
 import { request } from "@/utils/request";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
@@ -30,9 +30,8 @@ const Favourites = () => {
     <>
       <div className="house">
         {list.map((item, index) => (
-          <div key={index}>
-            <div>Processed</div>
-            <RentCard
+          <div className="rentcard-wrapper" key={index}>
+            <StatusCard
               data={item}
               isFavorited={favourites?.includes(item._id)}
             />
