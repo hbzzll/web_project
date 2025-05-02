@@ -1,9 +1,28 @@
 $color: #eee;
-body{
-    background-color: $color;
+body {
+  background-color: $color;
 }
 
-img{
-    // Prevent dragging of images
-    -webkit-user-drag: none;
+img {
+  // Prevent dragging of images
+  -webkit-user-drag: none;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  #print-area,
+  #print-area * {
+    visibility: visible;
+  }
+
+  #print-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    padding: 20px;
+  }
 }

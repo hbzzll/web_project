@@ -9,6 +9,7 @@ import Favourites from "./Profile/Favourites/Favourites";
 import MyPublish from "./Profile/Publish/MyPublish";
 import TransactionTable from "./Profile/Transaction/Transaction";
 import Order from "./Profile/Order/Order";
+import SendContract from "../components/SendContract/SendContract";
 import PrivateRoute from "@/router";
 
 const HomePage = () => {
@@ -33,6 +34,7 @@ const HomePage = () => {
           <Route path="MyPublish" element={<MyPublish />} />
           <Route path="Order" element={<Order />} />
         </Route>
+        <Route path="/send-contract" element={<SendContract />} />
       </Routes>
     </>
   );

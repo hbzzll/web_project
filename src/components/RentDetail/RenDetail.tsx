@@ -8,25 +8,20 @@ import { request } from "@/utils/request";
 import { Modal } from "antd";
 import ContactLandlord from "./contact/contact";
 import LandlordInfo from "./landlordinfo/landlordinfo";
+import moment from "moment";
+import Fade from "./img_transition/img_trainsition";
 
-interface HouseDetail {
-  availableFrom: string;
-  balconies: number;
-  bathrooms: number;
-  city: string;
-  detailedAddress: string;
-  email: string;
-  hasElevator: false;
-  price: number;
-  propertyType: string;
-  rooms: number;
-  size: number;
-  _id: string;
-}
+const statusMap: { [key: number]: { label: string; color: string } } = {
+  0: { label: "Rejected", color: "red" },
+  1: { label: "Pending Review", color: "gray" },
+  2: { label: "Available", color: "orange" },
+  3: { label: "Rented", color: "green" },
+  4: { label: "Delisted", color: "black" },
+};
 
 const RentDetail = () => {
   const { id } = useParams(); //get id from url
-  const [info, setInfo] = useState<HouseDetail | any>({});
+  const [info, setInfo] = useState<any>({});
   const [isOpen, setisOpen] = useState(false);
 
   const mapRef = useRef<HTMLDivElement | null>(null); //?
@@ -39,58 +34,75 @@ const RentDetail = () => {
     { label: string; value: string }[]
   >([]);
 
+  const formatBoolean = (value?: boolean) => {
+    if (value === true) return "Yes";
+    else if (value === false) return "No";
+    else return undefined;
+  };
+
   useEffect(() => {
     const fetchDetail = async () => {
       const res = await request.get(`/api/house/${id}`);
       setInfo(res);
 
-      const transformed = Object.entries(res).map(([key, value]) => ({
-        label: key,
-        value: String(value),
-      }));
+      const transformed = [
+        { label: "Status", value: statusMap[res.status].label },
+        { label: "Property Type", value: res.propertyType },
+        { label: "Size", value: `${res.size} m²` },
+        { label: "Price", value: `${res.price} kr` },
+        { label: "Rooms", value: res.rooms },
+        {
+          label: "Available From",
+          value: moment(res.availableFrom).format("YYYY/MM/DD"),
+        },
+        { label: "Bathrooms", value: res.bathrooms },
+        { label: "Balconies", value: res.balconies },
+        { label: "Has Elevator", value: formatBoolean(res.elevator) },
+        { label: "Has Furniture", value: formatBoolean(res.furniture) },
+        { label: "Parking", value: formatBoolean(res.parking) },
+        { label: "petsAllowed", value: formatBoolean(res.petsAllowed) },
+      ].filter((item) => item.value !== undefined && item.value !== null);
 
       setPropertyInfo(transformed);
     };
-    fetchDetail();
-  }, [id]);
 
-  const houseImages = [
-    "https://images.unsplash.com/photo-1600585154340-be6161a56a0c", // 房子外景
-    "https://images.unsplash.com/photo-1570129477492-45c003edd2be", // 客厅
-    "https://images.unsplash.com/photo-1580587771525-78b9dba3b914", // 餐厅
-  ];
-  const coordinates = {
-    lat: 56.2789,
-    lng: 14.5322,
-  };
+    fetchDetail();
+  }, []);
+
+  const houseImages = info.images || [];
+  console.log(houseImages);
+  const title = `${info.rooms} rooms ${info.propertyType} of ${info.size} m² in ${info.city}`;
+
   return (
     <>
       <div className="imag">
-        <Transition images={houseImages} />
+        <Fade images={houseImages} />
       </div>
       <div className="container-detail">
         <div className="detail-info">
           <div>Add to favourites</div>
-          <div className="title">{info.detailedAddress}</div>
+          <div className="title">{title}</div>
           <div
             className="location"
             onClick={scrollToMap}
             style={{ cursor: "pointer" }}
           >
-            RYDS ALLE, SWEDEN
+            {info.detailedAddress}
           </div>
           <div className="property">property</div>
           <div>
             <Description data={propertyInfo} />
           </div>
 
-          <div className="map" ref={mapRef} style={{ padding: "70px 0" }}>
-            <MapView
-              lat={coordinates.lat}
-              lng={coordinates.lng}
-              label="RYDS ALLE, SWEDEN"
-            />
-          </div>
+          {info.location && (
+            <div className="map" ref={mapRef} style={{ padding: "70px 0" }}>
+              <MapView
+                lat={info.location.lat}
+                lng={info.location.lng}
+                label="RYDS ALLE, SWEDEN"
+              />
+            </div>
+          )}
           <div className="3d model"> 3d model</div>
         </div>
 

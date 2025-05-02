@@ -3,24 +3,25 @@ import { Modal, Button, message } from "antd";
 import { request } from "@/utils/request"; // 你自己的封装请求库
 
 interface User {
-  _id: string;
-  name: string;
-  email: string;
+  orderId: string;
+  tenantId: string;
+  tenantName: string;
+  tenantEmail: string;
 }
 
 interface ContractModalProps {
   open: boolean;
   houseId: string;
   onClose: () => void;
-  //   onContractConfirmed: () => void;
+  onRefresh: () => void;
 }
 
 const ContractModal = ({
   open,
   houseId,
   onClose,
-}: //   onContractConfirmed,
-ContractModalProps) => {
+  onRefresh,
+}: ContractModalProps) => {
   const [users, setUsers] = useState<User[]>([]);
   const [sentContracts, setSentContracts] = useState<string[]>([]);
 
@@ -35,10 +36,17 @@ ContractModalProps) => {
     }
   };
 
-  const handleSendContract = (userId: string) => {
+  const handleSendContract = ({
+    orderId,
+    userId,
+  }: {
+    orderId: string;
+    userId: string;
+  }) => {
     setSentContracts((prev) => [...prev, userId]);
     message.success("Contract sent successfully!");
-    // 这里如果想要通知后端，可以同时发一个 POST /contract/send API
+
+    window.open(`/send-contract?orderId=${orderId}`);
   };
 
   const handleConfirmContract = async (userId: string) => {
@@ -49,7 +57,7 @@ ContractModalProps) => {
       });
       message.success("Contract confirmed!");
       onClose();
-      // onContractConfirmed(); // 通知父组件刷新列表
+      onRefresh();
     } catch (error) {
       message.error("Failed to confirm contract.");
     }
@@ -75,31 +83,36 @@ ContractModalProps) => {
       ) : (
         users.map((user) => (
           <div
-            key={user._id}
+            key={user.tenantId}
             className="flex items-center justify-between p-2 border-b"
           >
             <div>
-              <div className="font-semibold">{user.name}</div>
-              <div className="text-gray-500 text-sm">{user.email}</div>
+              <div className="font-semibold">{user.tenantName}</div>
+              <div className="text-gray-500 text-sm">{user.tenantEmail}</div>
             </div>
             <div className="flex gap-2">
               <Button
-                type={sentContracts.includes(user._id) ? "default" : "primary"}
-                disabled={sentContracts.includes(user._id)}
-                onClick={() => handleSendContract(user._id)}
+                type={"primary"}
+                disabled={sentContracts.includes(user.tenantId)}
+                onClick={() =>
+                  handleSendContract({
+                    orderId: user.orderId,
+                    userId: user.tenantId,
+                  })
+                }
+                style={{ margin: "0 10px" }}
               >
-                {sentContracts.includes(user._id)
+                {sentContracts.includes(user.tenantId)
                   ? "Contract Sent"
                   : "Send Contract"}
               </Button>
-              {sentContracts.includes(user._id) && (
-                <Button
-                  type="primary"
-                  onClick={() => handleConfirmContract(user._id)}
-                >
-                  Confirm Contract
-                </Button>
-              )}
+
+              <Button
+                type="primary"
+                onClick={() => handleConfirmContract(user.tenantId)}
+              >
+                Confirm Contract
+              </Button>
             </div>
           </div>
         ))

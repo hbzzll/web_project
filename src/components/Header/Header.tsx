@@ -18,7 +18,7 @@ const Header = () => {
   const dispatch = useAppDispatch();
   return (
     <>
-      <header>
+      <header className="header">
         <div className="container flex">
           <Link to="/" className="logo">
             <img src="/images/logo.png" alt="" />

@@ -2,10 +2,14 @@ import { Table, Button, Tag, message } from "antd";
 import type { TableProps } from "antd";
 import { useEffect, useState } from "react";
 import { request } from "@/utils/request";
+import moment from "moment";
 
 interface DataType {
   housePrice: number;
-  // image: house.image[0],
+  image: string;
+  title: string;
+  details: string;
+  detailedAddress: string;
   tenantName: string;
   tenantEmail: string;
   landlordName: string;
@@ -13,6 +17,8 @@ interface DataType {
   houseId: string;
   orderId: string;
   status: number;
+  createdAt: string;
+  updatedAt: string;
 }
 
 const statusMap: { [key: number]: { label: string; color: string } } = {
@@ -89,20 +95,31 @@ const TransactionTable = () => {
   const columns: TableProps<DataType>["columns"] = [
     {
       title: "House",
-      dataIndex: "houseImage",
-      key: "houseImage",
-      render: (text, record) => (
-        <div className="flex items-center gap-2">
+      key: "house",
+      render: (record) => (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 50,
+          }}
+        >
           <img
-            src={record.houseImage}
+            src={record.image}
             alt="House"
-            style={{ width: 80, height: 60, objectFit: "cover" }}
+            style={{
+              width: 180,
+              height: 120,
+              objectFit: "cover",
+            }}
           />
           <div>
-            <div>{record.housePrice}</div>
-            <div style={{ color: "#888", fontSize: "12px" }}>
-              {record.houseLocation}
+            <div style={{ fontSize: 17, fontWeight: 800 }}>{record.title}</div>
+            <div style={{ fontSize: 15, fontWeight: 600 }}>
+              {record.housePrice} kr
             </div>
+            <div style={{ fontSize: 15 }}>{record.detailedAddress}</div>
+            <div style={{ fontSize: 15 }}>{record.details}</div>
           </div>
         </div>
       ),
@@ -114,7 +131,7 @@ const TransactionTable = () => {
       render: (text, record) => (
         <div>
           <div>{record.tenantName}</div>
-          <div style={{ color: "#888", fontSize: "12px" }}>
+          <div style={{ color: "#888", fontSize: 15 }}>
             {record.tenantEmail}
           </div>
         </div>
@@ -122,12 +139,12 @@ const TransactionTable = () => {
     },
     {
       title: "Landlord",
-      dataIndex: "ownerName",
-      key: "ownerName",
+      dataIndex: "landlordName",
+      key: "landlordName",
       render: (text, record) => (
         <div>
           <div>{record.landlordName}</div>
-          <div style={{ color: "#888", fontSize: "12px" }}>
+          <div style={{ color: "#888", fontSize: 15 }}>
             {record.landlordEmail}
           </div>
         </div>
@@ -140,6 +157,17 @@ const TransactionTable = () => {
       render: (status) => {
         const mapped = statusMap[status];
         return mapped ? <Tag color={mapped.color}>{mapped.label}</Tag> : null;
+      },
+    },
+    {
+      title: "Date",
+      key: "Date",
+      render: (record) => {
+        if (record.status === 0) {
+          return <div>{moment(record.updatedAt).format("YYYY-MM-DD")}</div>;
+        } else {
+          return <div>{moment(record.createdAt).format("YYYY-MM-DD")}</div>;
+        }
       },
     },
     {
@@ -184,7 +212,7 @@ const TransactionTable = () => {
       columns={columns}
       dataSource={list}
       rowKey="orderId"
-      pagination={{ pageSize: 10 }}
+      pagination={{ pageSize: 6 }}
     />
   );
 };

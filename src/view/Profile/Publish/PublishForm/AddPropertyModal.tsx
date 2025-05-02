@@ -1,23 +1,11 @@
-import React from "react";
-import {
-  Form,
-  Input,
-  InputNumber,
-  DatePicker,
-  Button,
-  Select,
-  Row,
-  Col,
-  Switch,
-  message,
-  Modal,
-} from "antd";
-import { useState } from "react";
-import { request } from "@/utils/request";
+import React, { useState } from "react";
+import { Form, message, Modal, Button } from "antd";
+
 import { useSelector } from "react-redux";
+import { request } from "@/utils/request";
 import { RootState } from "@/store";
 
-const { Option } = Select;
+import PropertyForm from "./PropertyForm";
 
 interface Props {
   open: boolean;
@@ -33,27 +21,45 @@ export const AddPropertyModal: React.FC<Props> = ({
   const [form] = Form.useForm();
   const { email } = useSelector((state: RootState) => state.user);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [pendingValues, setPendingValues] = useState<any>(null);
+  const [fileList, setFileList] = useState<any[]>([]);
 
   const onFinish = async (values: any) => {
-    setPendingValues(values);
+    if (!fileList.length) {
+      message.error("Please upload at least one image.");
+      message.error("Please upload at least one image.");
+      return;
+    }
     setShowConfirm(true);
   };
 
   const Postrequest = async () => {
-    const property = { ...pendingValues, email: email, status: 1 };
     try {
-      const res = await request.post("/api/user/house/publish", property);
-      message.success("success");
-      message.success("success");
+      const pendingValues = await form.validateFields();
+      const formData = new FormData();
+      fileList.forEach((file) => formData.append("images", file.originFileObj));
+
+      //get the urls of the uploaded images
+      const uploadRes = await request.post(
+        "/api/user/house/publish/images",
+        formData
+      );
+
+      const property = {
+        ...pendingValues,
+        email,
+        status: 1,
+        images: uploadRes.urls,
+      };
+
+      await request.post("/api/user/house/publish", property);
+      message.success("Property published successfully");
       form.resetFields();
       onSuccess();
     } catch (err) {
-      message.error("An error occurred while submitting the form.");
-      message.error("An error occurred while submitting the form.");
+      message.error("Failed to submit the form");
     } finally {
       setShowConfirm(false);
-      setPendingValues(null);
+      setFileList([]);
     }
   };
 
@@ -65,146 +71,24 @@ export const AddPropertyModal: React.FC<Props> = ({
       footer={null}
     >
       <Form form={form} layout="vertical" onFinish={onFinish}>
-        <Row gutter={16}>
-          <Col span={12}>
-            <Form.Item
-              label="Property Type"
-              name="propertyType"
-              rules={[
-                { required: true, message: "Please select a property type" },
-              ]}
-            >
-              <Select>
-                <Option value="apartment">Apartment</Option>
-                <Option value="villa">Villa</Option>
-                <Option value="cottage">Cottage</Option>
-              </Select>
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item
-              label="Monthly Rent (¥)"
-              name="price"
-              rules={[
-                { required: true, message: "Please enter the monthly rent" },
-              ]}
-            >
-              <InputNumber min={1} />
-            </Form.Item>
-          </Col>
-        </Row>
-
-        <Row gutter={16}>
-          <Col span={12}>
-            <Form.Item
-              label="Number of Rooms"
-              name="rooms"
-              rules={[
-                { required: true, message: "Please enter the number of rooms" },
-              ]}
-            >
-              <InputNumber min={1} />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item
-              label="Size (sqm)"
-              name="size"
-              rules={[
-                { required: true, message: "Please enter the property size" },
-              ]}
-            >
-              <InputNumber min={1} />
-            </Form.Item>
-          </Col>
-        </Row>
-
-        <Row gutter={16}>
-          <Col span={12}>
-            <Form.Item
-              label="City"
-              name="city"
-              rules={[{ required: true, message: "Please enter the city" }]}
-            >
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item
-              label="Detailed Address"
-              name="detailedAddress"
-              rules={[
-                {
-                  required: true,
-                  message: "Please enter the detailed address",
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-          </Col>
-        </Row>
-
-        <Row gutter={16}>
-          <Col span={12}>
-            <Form.Item
-              label="Available From"
-              name="availableFrom"
-              rules={[
-                { required: true, message: "Please select the available date" },
-              ]}
-            >
-              <DatePicker />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item
-              label="Has Elevator"
-              name="hasElevator"
-              valuePropName="checked"
-            >
-              <Switch />
-            </Form.Item>
-          </Col>
-        </Row>
-
-        <Row gutter={16}>
-          <Col span={12}>
-            <Form.Item
-              label="Number of Bathrooms"
-              name="bathrooms"
-              rules={[
-                {
-                  required: true,
-                  message: "Please enter the number of bathrooms",
-                },
-              ]}
-            >
-              <InputNumber min={1} />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item label="Number of Balconies" name="balconies">
-              <InputNumber min={0} />
-            </Form.Item>
-          </Col>
-        </Row>
-
-        <Form.Item>
+        <PropertyForm fileList={fileList} setFileList={setFileList} />
+        <Form.Item style={{ textAlign: "center" }}>
           <Button type="primary" htmlType="submit">
             Submit
           </Button>
         </Form.Item>
-
-        <Modal
-          title="Confirm Publish"
-          open={showConfirm}
-          onOk={Postrequest}
-          onCancel={() => setShowConfirm(false)}
-        >
-          Are you sure to publish this property?
-        </Modal>
       </Form>
+
+      <Modal
+        title="Confirm Publish"
+        open={showConfirm}
+        onOk={Postrequest}
+        onCancel={() => {
+          setShowConfirm(false);
+        }}
+      >
+        Are you sure to publish this property?
+      </Modal>
     </Modal>
   );
 };

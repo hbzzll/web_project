@@ -1,34 +1,46 @@
 import React from "react";
-import { Carousel } from "antd";
-import "./img_transition.scss";
-import { LeftOutlined, RightOutlined } from "@ant-design/icons";
-
-const contentStyle: React.CSSProperties = {
-  margin: 0,
-  height: "500px",
-  color: "#fff",
-  textAlign: "center",
-  background: "#364d79",
-};
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 interface Props {
   images: string[];
 }
 
-const App: React.FC<Props> = ({ images }) => {
+const Fade: React.FC<Props> = ({ images }) => {
+  const settings = {
+    dots: true,
+    fade: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    waitForAnimate: false,
+  };
+
   return (
-    <Carousel arrows infinite={false} style={{ width: "1000px" }}>
-      {images.map((url, index) => (
-        <div key={index}>
-          <img
-            src={url}
-            alt={`house-${index}`}
-            style={{ ...contentStyle, objectFit: "cover", width: "100%" }}
-          />
-        </div>
-      ))}
-    </Carousel>
+    <div className="slider-container">
+      {images.length === 1 ? (
+        <img
+          src={images[0]}
+          alt="only-img"
+          style={{ width: "100%", height: "400px" }}
+        />
+      ) : (
+        <Slider {...settings}>
+          {images.map((url, index) => (
+            <div key={index}>
+              <img
+                src={url}
+                alt={`slide-${index}`}
+                style={{ width: "100%", height: "400px" }}
+              />
+            </div>
+          ))}
+        </Slider>
+      )}
+    </div>
   );
 };
 
-export default App;
+export default Fade;

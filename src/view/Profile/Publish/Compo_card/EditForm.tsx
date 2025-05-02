@@ -1,18 +1,9 @@
-import React, { useEffect } from "react";
-import {
-  Modal,
-  Form,
-  Input,
-  InputNumber,
-  Switch,
-  Select,
-  DatePicker,
-  Row,
-  Col,
-  Button,
-} from "antd";
+import React, { useEffect, useState } from "react";
+import { Modal, Form, message } from "antd";
 import moment from "moment";
-const { Option } = Select;
+import { request } from "@/utils/request";
+
+import PropertyForm from "../PublishForm/PropertyForm";
 
 interface Props {
   open: boolean;
@@ -23,6 +14,8 @@ interface Props {
 
 const EditForm: React.FC<Props> = ({ open, onCancel, initialData, onSave }) => {
   const [form] = Form.useForm();
+  const [fileList, setFileList] = useState<any[]>([]);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   useEffect(() => {
     if (open && initialData) {
@@ -32,150 +25,94 @@ const EditForm: React.FC<Props> = ({ open, onCancel, initialData, onSave }) => {
           ? moment(initialData.availableFrom)
           : undefined,
       });
+
+      if (Array.isArray(initialData.images)) {
+        const transformed = initialData.images.map((url, index) => ({
+          uid: `init-${index}`,
+          name: `image-${index}.png`,
+          status: "done",
+          url,
+        }));
+        setFileList(transformed);
+      }
     }
   }, [open, initialData]);
 
   const handleSubmit = async () => {
-    const values = await form.validateFields();
-    onSave({ ...initialData, ...values });
+    if (!fileList.length) {
+      message.error("Please upload at least one image.");
+      message.error("Please upload at least one image.");
+      return;
+    }
+    setShowConfirm(true);
   };
+
+  const transformed = async () => {
+    const formData = new FormData();
+    const newImages: string[] = [];
+
+    for (const file of fileList) {
+      if (file.originFileObj) {
+        formData.append("images", file.originFileObj);
+      } else if (file.url) {
+        newImages.push(file.url);
+      }
+    }
+
+    const uploadRes = await request.post(
+      "/api/user/house/publish/images",
+      formData
+    );
+
+    const savedUrl = [...newImages, ...uploadRes.urls];
+    return savedUrl;
+  };
+
+  const handleConfirmSave = async () => {
+    try {
+      const pendingValues = await form.validateFields();
+      const savedUrl = await transformed();
+
+      const property = {
+        ...initialData,
+        ...pendingValues,
+        images: savedUrl,
+      };
+      console.log(property);
+      onSave(property);
+    } catch (err) {
+      message.error("Failed to save the property");
+    } finally {
+      setShowConfirm(false);
+    }
+  };
+
   return (
     <Modal
       title="Edit Property"
       open={open}
       onOk={handleSubmit}
       okText="Save"
-      onCancel={() => {
+      onCancel={async () => {
         form.resetFields();
+        await setFileList([]);
         onCancel();
       }}
     >
       <Form form={form} layout="vertical">
-        <Row gutter={16}>
-          <Col span={12}>
-            <Form.Item
-              label="Property Type"
-              name="propertyType"
-              rules={[
-                { required: true, message: "Please select a property type" },
-              ]}
-            >
-              <Select>
-                <Option value="apartment">Apartment</Option>
-                <Option value="villa">Villa</Option>
-                <Option value="cottage">Cottage</Option>
-              </Select>
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item
-              label="Monthly Rent (¥)"
-              name="price"
-              rules={[
-                { required: true, message: "Please enter the monthly rent" },
-              ]}
-            >
-              <InputNumber min={1} />
-            </Form.Item>
-          </Col>
-        </Row>
-
-        <Row gutter={16}>
-          <Col span={12}>
-            <Form.Item
-              label="Number of Rooms"
-              name="rooms"
-              rules={[
-                { required: true, message: "Please enter the number of rooms" },
-              ]}
-            >
-              <InputNumber min={1} />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item
-              label="Size (sqm)"
-              name="size"
-              rules={[
-                { required: true, message: "Please enter the property size" },
-              ]}
-            >
-              <InputNumber min={1} />
-            </Form.Item>
-          </Col>
-        </Row>
-
-        <Row gutter={16}>
-          <Col span={12}>
-            <Form.Item
-              label="City"
-              name="city"
-              rules={[{ required: true, message: "Please enter the city" }]}
-            >
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item
-              label="Detailed Address"
-              name="detailedAddress"
-              rules={[
-                {
-                  required: true,
-                  message: "Please enter the detailed address",
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-          </Col>
-        </Row>
-
-        <Row gutter={16}>
-          <Col span={12}>
-            <Form.Item
-              label="Available From"
-              name="availableFrom"
-              rules={[
-                { required: true, message: "Please select the available date" },
-              ]}
-            >
-              <DatePicker />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item
-              label="Has Elevator"
-              name="hasElevator"
-              valuePropName="checked"
-            >
-              <Switch />
-            </Form.Item>
-          </Col>
-        </Row>
-
-        <Row gutter={16}>
-          <Col span={12}>
-            <Form.Item
-              label="Number of Bathrooms"
-              name="bathrooms"
-              rules={[
-                {
-                  required: true,
-                  message: "Please enter the number of bathrooms",
-                },
-              ]}
-            >
-              <InputNumber min={1} />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item label="Number of Balconies" name="balconies">
-              <InputNumber min={0} />
-            </Form.Item>
-          </Col>
-        </Row>
+        <PropertyForm fileList={fileList} setFileList={setFileList} />
       </Form>
+
+      <Modal
+        title="Confirm Save"
+        open={showConfirm}
+        onOk={handleConfirmSave}
+        onCancel={() => {
+          setShowConfirm(false);
+        }}
+      >
+        Are you sure to save this property?
+      </Modal>
     </Modal>
   );
 };

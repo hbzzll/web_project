@@ -6,7 +6,10 @@ import { request } from "@/utils/request";
 
 interface DataType {
   housePrice: number;
-  // image: house.image[0],
+  image: string;
+  title: string;
+  details: string;
+  detailedAddress: string;
   tenantName: string;
   tenantEmail: string;
   landlordName: string;
@@ -14,7 +17,8 @@ interface DataType {
   houseId: string;
   orderId: string;
   status: number;
-  updatedAt: any;
+  createdAt: string;
+  updatedAt: string;
 }
 
 const statusMap: { [key: number]: { label: string; color: string } } = {
@@ -44,20 +48,31 @@ const TransactionTable = () => {
   const columns: TableProps<DataType>["columns"] = [
     {
       title: "House",
-      dataIndex: "houseImage",
-      key: "houseImage",
-      render: (text, record) => (
-        <div className="flex items-center gap-2">
+      key: "house",
+      render: (record) => (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 50,
+          }}
+        >
           <img
-            src={record.houseImage}
+            src={record.image}
             alt="House"
-            style={{ width: 80, height: 60, objectFit: "cover" }}
+            style={{
+              width: 180,
+              height: 120,
+              objectFit: "cover",
+            }}
           />
           <div>
-            <div>{record.housePrice}</div>
-            <div style={{ color: "#888", fontSize: "12px" }}>
-              {record.houseLocation}
+            <div style={{ fontSize: 17, fontWeight: 800 }}>{record.title}</div>
+            <div style={{ fontSize: 15, fontWeight: 600 }}>
+              {record.housePrice} kr
             </div>
+            <div style={{ fontSize: 15 }}>{record.detailedAddress}</div>
+            <div style={{ fontSize: 15 }}>{record.details}</div>
           </div>
         </div>
       ),
@@ -99,11 +114,10 @@ const TransactionTable = () => {
     },
     {
       title: "Date",
-      dataIndex: "updateAt",
-      key: "date",
-      render: (text, record) => {
-        console.log("record.updateAt", record.updatedAt);
-        return <div>{moment(record.updatedAt).format("YYYY-MM-DD")}</div>;
+      dataIndex: "updatedAt",
+      key: "updatedAt",
+      render: (updateAt) => {
+        return <div>{moment(updateAt).format("YYYY-MM-DD")}</div>;
       },
     },
   ];
@@ -113,7 +127,7 @@ const TransactionTable = () => {
       columns={columns}
       dataSource={list}
       rowKey="orderId"
-      pagination={{ pageSize: 10 }}
+      pagination={{ pageSize: 6 }}
     />
   );
 };

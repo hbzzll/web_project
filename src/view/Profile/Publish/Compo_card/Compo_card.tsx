@@ -120,7 +120,7 @@ const Compo_card: React.FC<Props> = ({ list, setList }) => {
 
   return (
     <>
-      <Divider>My Houses</Divider>
+      <Divider style={{ padding: "20px 0px", fontSize: 20 }}>My Houses</Divider>
       <div className="house">
         {otherList.map((item, index) => (
           <div className="rentcard-wrapper" key={index}>
@@ -145,7 +145,11 @@ const Compo_card: React.FC<Props> = ({ list, setList }) => {
         ))}
       </div>
 
-      {rentedList.length > 0 && <Divider>Rented Houses</Divider>}
+      {rentedList.length > 0 && (
+        <Divider style={{ padding: "20px 0px", fontSize: 20 }}>
+          Rented Houses
+        </Divider>
+      )}
 
       <div className="house">
         {rentedList.map((item, index) => (
@@ -179,7 +183,13 @@ const Compo_card: React.FC<Props> = ({ list, setList }) => {
         open={contactOpen}
         houseId={selectedId!}
         onClose={() => setContactOpen(false)}
-        // onContractConfirmed={refreshTransactions}
+        onRefresh={() =>
+          setList((prev) =>
+            prev.map((item) =>
+              item._id === selectedId ? { ...item, status: 3 } : item
+            )
+          )
+        }
       />
     </>
   );

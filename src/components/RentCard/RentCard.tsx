@@ -68,7 +68,7 @@ const RentCard = ({ data, isFavorited = false }: RentCardProps) => {
                   color: city === "For Sale" ? "#25b579" : "#ff9800",
                 }}
               >
-                {city}
+                {city}·{propertyType}
               </span>
               <span className="heart-icon" onClick={handleFavourite}>
                 {liked ? (
@@ -86,8 +86,7 @@ const RentCard = ({ data, isFavorited = false }: RentCardProps) => {
           </div>
           <div className="button flex">
             <div>
-              <button className="btn2">{price}</button>
-              <label htmlFor="">/sqrt</label>
+              <div className="btn2">{price} kr/ Month</div>
             </div>
             <div>{propertyType}</div>
           </div>
