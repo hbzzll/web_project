@@ -10,6 +10,8 @@ import {
 import type { MenuProps } from "antd";
 import { Breadcrumb, Layout, Menu, theme } from "antd";
 import UserProfile from "./Userprofile/Userprofile";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -29,24 +31,26 @@ function getItem(
   } as MenuItem;
 }
 
-const items: MenuItem[] = [
-  getItem("User", "/Profile", <UserOutlined />),
-  getItem("Transaction", "/Transaction", <DesktopOutlined />),
-  getItem("Favourites", "/Favourites", <PieChartOutlined />),
-
-  getItem("Property", "sub", <TeamOutlined />, [
-    getItem("Publish", "/MyPublish", <TeamOutlined />),
-    getItem("Order", "/Order", <TeamOutlined />),
-  ]),
-  getItem("Log out", "/logout", <FileOutlined />),
-];
-
 const App: React.FC = () => {
+  const { role } = useSelector((state: RootState) => state.user);
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
   const navigate = useNavigate();
+
+  const items: MenuItem[] = [
+    getItem("Profile", "/Profile", <UserOutlined />),
+    role === "admin" ? getItem("Users", "/Users", <FileOutlined />) : null,
+    getItem("Transaction", "/Transaction", <DesktopOutlined />),
+    getItem("Favourites", "/Favourites", <PieChartOutlined />),
+
+    getItem("Property", "sub", <TeamOutlined />, [
+      getItem("Publish", "/MyPublish", <TeamOutlined />),
+      getItem("Order", "/Order", <TeamOutlined />),
+    ]),
+    getItem("Log out", "/LogOut", <FileOutlined />),
+  ];
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
@@ -64,8 +68,19 @@ const App: React.FC = () => {
           onClick={(info) => navigate(`/Menu${info.key}`)}
         />
       </Sider>
-      <Layout>
-        <Content style={{ margin: "0 16px" }}>
+
+      <Layout
+        style={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <Content
+          style={{
+            margin: "0 auto",
+            width: "90%",
+          }}
+        >
           <div
             style={{
               padding: 24,

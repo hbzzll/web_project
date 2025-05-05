@@ -15,12 +15,11 @@ interface Props {
 
 const Compo_card: React.FC<Props> = ({ list, setList }) => {
   const [contactOpen, setContactOpen] = useState(false);
+  const [reviewOpen, setReviewOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<string>("");
   const [selectedItem, setSelectedItme] = useState<any>(null);
-  const favourites = useSelector(
-    (state: RootState) => state.user.profile.favourites
-  );
+  const { profile, role } = useSelector((state: RootState) => state.user);
 
   const otherList = list.filter((item) => item.status !== 3);
   const rentedList = list.filter((item) => item.status === 3);
@@ -118,15 +117,56 @@ const Compo_card: React.FC<Props> = ({ list, setList }) => {
     });
   };
 
+  const handleReview = (houseId: string) => {
+    setSelectedId(houseId);
+    setReviewOpen(true);
+  };
+
+  const handleReject = async () => {
+    try {
+      await request.put("/api/user/house/review/reject", {
+        houseId: selectedId,
+      });
+      message.success("Rejected successfully");
+      message.success("Rejected successfully");
+      setList((prev) =>
+        prev.map((item) =>
+          item._id === selectedId ? { ...item, status: 0 } : item
+        )
+      );
+      setReviewOpen(false);
+    } catch (err) {
+      message.error("Rejection failed");
+    }
+  };
+
+  const handleApprove = async () => {
+    try {
+      await request.put("/api/user/house/review/approve", {
+        houseId: selectedId,
+      });
+      message.success("Approved successfully");
+      message.success("Approved successfully");
+      setList((prev) =>
+        prev.map((item) =>
+          item._id === selectedId ? { ...item, status: 2 } : item
+        )
+      );
+      setReviewOpen(false);
+    } catch (err) {
+      message.error("Approval failed");
+    }
+  };
+
   return (
     <>
-      <Divider style={{ padding: "20px 0px", fontSize: 20 }}>My Houses</Divider>
+      <Divider style={{ padding: "10px 0px", fontSize: 20 }}>My Houses</Divider>
       <div className="house">
         {otherList.map((item, index) => (
           <div className="rentcard-wrapper" key={index}>
             <StatusCard
               data={item}
-              isFavorited={favourites?.includes(item._id)}
+              isFavorited={profile.favourites?.includes(item._id)}
             />
 
             <div className="card-actions">
@@ -140,6 +180,15 @@ const Compo_card: React.FC<Props> = ({ list, setList }) => {
                 icon={<UserOutlined />}
                 onClick={() => handleOpenUserList(item._id)}
               />
+              {role === "admin" && item.status === 1 && (
+                <Button
+                  color="primary"
+                  variant="outlined"
+                  onClick={() => handleReview(item._id)}
+                >
+                  Review
+                </Button>
+              )}
             </div>
           </div>
         ))}
@@ -156,13 +205,13 @@ const Compo_card: React.FC<Props> = ({ list, setList }) => {
           <div className="rentcard-wrapper" key={index}>
             <StatusCard
               data={item}
-              isFavorited={favourites?.includes(item._id)}
+              isFavorited={profile.favourites?.includes(item._id)}
             />
 
             <div className="card-actions">
               <Button
                 danger
-                disabled={item.transactionStatus !== 3}
+                disabled={role !== "admin" && item.transactionStatus !== 3}
                 onClick={() => handleReleaseContract(item._id)}
               >
                 Release Contract
@@ -181,7 +230,7 @@ const Compo_card: React.FC<Props> = ({ list, setList }) => {
 
       <ContractModal
         open={contactOpen}
-        houseId={selectedId!}
+        houseId={selectedId}
         onClose={() => setContactOpen(false)}
         onRefresh={() =>
           setList((prev) =>
@@ -191,6 +240,22 @@ const Compo_card: React.FC<Props> = ({ list, setList }) => {
           )
         }
       />
+
+      <Modal
+        open={reviewOpen}
+        title="Review Listing"
+        onCancel={() => setReviewOpen(false)}
+        footer={[
+          <Button key="reject" danger onClick={handleReject}>
+            Reject
+          </Button>,
+          <Button key="approve" type="primary" onClick={handleApprove}>
+            Approve
+          </Button>,
+        ]}
+      >
+        Are you sure to approve or reject this listing?
+      </Modal>
     </>
   );
 };

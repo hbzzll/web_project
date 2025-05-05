@@ -5,6 +5,11 @@
   box-sizing: border-box;
 }
 
+a {
+  color: #1d1e1f;
+  text-decoration: none;
+}
+
 strong {
   font-weight: bold;
 }
@@ -48,7 +53,7 @@ ul {
 .box {
   border-radius: 20px;
   overflow: hidden;
-  width: 300px;
+  width: 350px;
   /* margin-bottom: 40px; */
   cursor: pointer;
 }
@@ -66,12 +71,6 @@ img {
   width: 100%;
   height: 100%;
   cursor: pointer;
-}
-
-.btn2 {
-  border-radius: 50px;
-  font-size: 20px;
-  padding: 2px;
 }
 
 label {

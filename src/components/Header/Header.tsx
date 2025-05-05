@@ -13,7 +13,7 @@ import { Button } from "antd";
 
 const Header = () => {
   const [navList, setNavList] = useState(false);
-  const [open, setopen] = useState(false);
+  const [open, setOpen] = useState(false);
   const { isAuth, name } = useSelector((state: RootState) => state.user);
   const dispatch = useAppDispatch();
   return (
@@ -33,6 +33,7 @@ const Header = () => {
               ))}
             </ul>
           </div>
+
           <div className="button flex">
             {isAuth ? (
               <UserMenu onLogout={() => dispatch(logout())} />
@@ -41,7 +42,7 @@ const Header = () => {
                 size="large"
                 color="purple"
                 variant="filled"
-                onClick={() => setopen(true)}
+                onClick={() => setOpen(true)}
               >
                 Sign In
               </Button>
@@ -59,7 +60,7 @@ const Header = () => {
           </div>
         </div>
       </header>
-      <LoginModal open={open} onClose={() => setopen(false)} />
+      <LoginModal open={open} onClose={() => setOpen(false)} />
     </>
   );
 };

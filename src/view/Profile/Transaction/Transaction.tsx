@@ -1,6 +1,7 @@
 import { Table, Button, Tag, message } from "antd";
 import type { TableProps } from "antd";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { request } from "@/utils/request";
 import moment from "moment";
 
@@ -30,6 +31,7 @@ const statusMap: { [key: number]: { label: string; color: string } } = {
 
 const TransactionTable = () => {
   const [list, setList] = useState<any[]>([]);
+  const navigate = useNavigate();
 
   const fetchHouseinfo = async () => {
     try {
@@ -107,6 +109,7 @@ const TransactionTable = () => {
           <img
             src={record.image}
             alt="House"
+            onClick={() => navigate(`/list/${record.houseId}`)}
             style={{
               width: 180,
               height: 120,
@@ -212,7 +215,7 @@ const TransactionTable = () => {
       columns={columns}
       dataSource={list}
       rowKey="orderId"
-      pagination={{ pageSize: 6 }}
+      pagination={{ pageSize: 5 }}
     />
   );
 };

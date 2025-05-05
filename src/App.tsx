@@ -21,6 +21,8 @@ function App() {
               name: res.name,
               email: res.email,
               profile: res.profile,
+              status: res.status,
+              role: res.role,
             })
           );
         })

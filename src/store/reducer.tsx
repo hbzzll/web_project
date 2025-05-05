@@ -18,6 +18,8 @@ interface UserState {
   name: string;
   email: string;
   profile: UserProfile;
+  role: string;
+  status: string;
 }
 
 const initialState: UserState = {
@@ -26,6 +28,7 @@ const initialState: UserState = {
   name: "",
   email: "",
   profile: {},
+  role: "",
 };
 
 const usetStore = createSlice({
@@ -34,12 +37,14 @@ const usetStore = createSlice({
 
   reducers: {
     setUser(state, action) {
-      const { token, name, email, profile } = action.payload;
+      const { token, name, email, profile, role, status } = action.payload;
       state.token = token;
       state.name = name;
       state.email = email;
       state.isAuth = !!token; // = Boolean()
       state.profile = profile;
+      state.role = role;
+      state.status = status;
       localStorage.setItem("token_key", token);
     },
     updateFavourites(state, action) {
@@ -52,6 +57,8 @@ const usetStore = createSlice({
       state.token = "";
       state.name = "";
       state.email = "";
+      state.role = "";
+      state.status = "";
       state.profile = {};
       state.isAuth = false;
       localStorage.removeItem("token_key");
@@ -82,6 +89,8 @@ interface LoginResponse {
   token?: string;
   name?: string;
   email?: string;
+  role?: string;
+  status?: string;
   profile?: {};
 }
 
@@ -104,6 +113,8 @@ const fetchLogin = (loginForm: LoginForm) => {
           token: res.token,
           name: res.name,
           email: res.email,
+          role: res.role,
+          status: res.status,
           profile: res.profile,
         })
       );

@@ -10,6 +10,8 @@ import MyPublish from "./Profile/Publish/MyPublish";
 import TransactionTable from "./Profile/Transaction/Transaction";
 import Order from "./Profile/Order/Order";
 import SendContract from "../components/SendContract/SendContract";
+import UserManagement from "./Profile/UserManagement/UserManagement";
+import LogOut from "./Profile/LogOut/LogOut";
 import PrivateRoute from "@/router";
 
 const HomePage = () => {
@@ -29,10 +31,12 @@ const HomePage = () => {
           }
         >
           <Route path="Profile" element={<UserProfile />} />
+          <Route path="Users" element={<UserManagement />} />
           <Route path="Transaction" element={<TransactionTable />} />
           <Route path="Favourites" element={<Favourites />} />
           <Route path="MyPublish" element={<MyPublish />} />
           <Route path="Order" element={<Order />} />
+          <Route path="LogOut" element={<LogOut />} />
         </Route>
         <Route path="/send-contract" element={<SendContract />} />
       </Routes>
