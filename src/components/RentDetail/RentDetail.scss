@@ -35,11 +35,8 @@
   padding: 20px 0;
 }
 
-.contact-info {
-}
-
 .contact {
-  height: 200px;
+  // height: 200px;
   padding: 16px;
   border: 2px solid #e5e5e5;
   border-radius: 20px;
@@ -48,9 +45,58 @@
 }
 
 .landlord {
-  height: 200px;
   padding: 16px;
   border: 2px solid #e5e5e5;
   border-radius: 20px;
   box-shadow: 0 0 20px 0 rgb(112 121 138 / 18%);
+}
+
+.contact-card h3 {
+  color: #aaa;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.contact-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: #444;
+
+  .value {
+    font-weight: 600;
+    font-size: 35px;
+    color: #000;
+  }
+}
+
+.label {
+  font-weight: 500;
+  color: #666;
+}
+
+.landlord .title {
+  color: #000;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.contact-card .contact-landlord {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 24px;
+  font-weight: 600;
+  font-size: 14px;
+  width: 100%;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #43a047;
+  }
 }

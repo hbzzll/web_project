@@ -20,12 +20,12 @@ const Header = () => {
     <>
       <header className="header">
         <div className="container flex">
-          <Link to="/" className="logo">
-            <img src="/images/logo.png" alt="" />
+          <Link to="/" className="logo" style={{ height: 60 }}>
+            <img src="/images/GoRent.png" alt="" />
           </Link>
 
           <div className="nav">
-            <ul className={navList ? "small" : "flex"}>
+            <ul className={navList ? "small" : "flex"} style={{ fontSize: 18 }}>
               {navlist.map((list, index) => (
                 <li key={index}>
                   <Link to={list.path}>{list.text}</Link>

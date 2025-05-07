@@ -54,6 +54,7 @@ ul {
   border-radius: 20px;
   overflow: hidden;
   width: 350px;
+  height: 410px;
   /* margin-bottom: 40px; */
   cursor: pointer;
 }

@@ -32,9 +32,9 @@ const ContactLandlord = ({ houseId, onSuccess }: Props) => {
   };
 
   return (
-    <Button className="contact-landlord" onClick={handleClick}>
+    <button className="contact-landlord" onClick={handleClick}>
       Contact landlord
-    </Button>
+    </button>
   );
 };
 

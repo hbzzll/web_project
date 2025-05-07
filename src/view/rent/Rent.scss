@@ -1,6 +1,6 @@
 .container-rent {
   display: flex;
-  padding: 50px;
+  padding: 50px 150px;
 }
 
 .filter {
@@ -13,6 +13,7 @@
   .search {
     display: flex;
     flex-direction: column;
+    gap: 10px;
   }
 }
 

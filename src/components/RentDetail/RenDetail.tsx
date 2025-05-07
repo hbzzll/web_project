@@ -1,15 +1,16 @@
 import "./RentDetail.scss";
 import { useRef, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
 import Description from "./description/description";
-import Transition from "./img_transition/img_trainsition";
 import MapView from "../Mapview";
 import { useParams } from "react-router-dom";
 import { request } from "@/utils/request";
-import { Modal } from "antd";
 import ContactLandlord from "./contact/contact";
 import LandlordInfo from "./landlordinfo/landlordinfo";
 import moment from "moment";
 import Fade from "./img_transition/img_trainsition";
+import { EnvironmentOutlined } from "@ant-design/icons";
 
 const statusMap: { [key: number]: { label: string; color: string } } = {
   0: { label: "Rejected", color: "red" },
@@ -23,6 +24,9 @@ const RentDetail = () => {
   const { id } = useParams(); //get id from url
   const [info, setInfo] = useState<any>({});
   const [isOpen, setisOpen] = useState(false);
+  const favourites = useSelector(
+    (state: RootState) => state.user.profile.favourites
+  );
 
   const mapRef = useRef<HTMLDivElement | null>(null); //?
 
@@ -80,13 +84,13 @@ const RentDetail = () => {
       </div>
       <div className="container-detail">
         <div className="detail-info">
-          <div>Add to favourites</div>
           <div className="title">{title}</div>
           <div
             className="location"
             onClick={scrollToMap}
             style={{ cursor: "pointer" }}
           >
+            <EnvironmentOutlined style={{ marginRight: 5 }} />
             {info.detailedAddress}
           </div>
           <div className="property">property</div>
@@ -108,12 +112,23 @@ const RentDetail = () => {
 
         <div className="contact-info">
           <div className="contact">
-            <div>Monthly rate</div>
-            {id && <ContactLandlord houseId={id} />}
+            <div className="contact-card">
+              <h3>Monthly Rate</h3>
+              <div className="contact-item">
+                <span className="value">{info.price} kr</span>
+              </div>
+              <div className="contact-item">
+                <span className="label">Available From:</span>
+                <span className="">
+                  {moment(info.availableFrom).format("YYYY/MM/DD")}
+                </span>
+              </div>
+              {id && <ContactLandlord houseId={id} />}
+            </div>
           </div>
 
           <div className="landlord">
-            <h2>Landlord Information</h2>
+            <div className="title">Landlord Information</div>
             {id && <LandlordInfo houseId={id} />}
           </div>
         </div>
