@@ -74,7 +74,6 @@ const RentDetail = () => {
   }, []);
 
   const houseImages = info.images || [];
-  console.log(houseImages);
   const title = `${info.rooms} rooms ${info.propertyType} of ${info.size} m² in ${info.city}`;
 
   return (

@@ -11,10 +11,7 @@ const SendContract = () => {
   const orderId = params.get("orderId");
 
   const [contractData, setContractData] = useState<any>(null);
-  const [contractHtml, setContractHtml] = useState<string>("");
   const [sending, setSending] = useState(false);
-
-  const [form] = Form.useForm();
 
   useEffect(() => {
     const fetchContractInfo = async () => {
@@ -32,16 +29,28 @@ const SendContract = () => {
   }, [orderId]);
 
   const handleSend = async () => {
+    //get contract html
+    const el = document.getElementById("print-area");
+    if (!el) return;
+    const html = el.outerHTML;
+
     try {
       setSending(true);
-      await request.post("/api/contract/sendEmail", {
-        orderId,
-        contractHtml,
-      });
+      await request.post(
+        "/api/user/house/contract/sendEmail",
+        {
+          orderId,
+          contractHtml: html,
+        },
+        {
+          timeout: 15000,
+        }
+      );
       message.success("Email sent successfully!");
-      navigate("/dashboard");
+      message.success("Email sent successfully!");
+      // navigate("/dashboard");
     } catch (err) {
-      console.error(err);
+      message.error("Failed to send email");
       message.error("Failed to send email");
     } finally {
       setSending(false);
@@ -66,12 +75,9 @@ const SendContract = () => {
         background: "#f5f5f5",
       }}
     >
-      <h2>Contract Preview</h2>
+      <h2 style={{ fontSize: 30, fontWeight: 600 }}>Contract Preview</h2>
 
-      <ContractFormPreview
-        contractData={contractData}
-        onBuildHtml={(html) => setContractHtml(html)}
-      />
+      <ContractFormPreview contractData={contractData} />
 
       <div style={{ marginTop: 32, display: "flex", gap: 20 }}>
         <Button type="primary" onClick={handleSend} loading={sending}>

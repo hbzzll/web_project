@@ -19,41 +19,15 @@ interface Props {
       size: number;
     };
   };
-  onBuildHtml: (html: string) => void;
 }
 
-const ContractFormPreview: React.FC<Props> = ({
-  contractData,
-  onBuildHtml,
-}) => {
+const ContractFormPreview: React.FC<Props> = ({ contractData }) => {
   const [form] = Form.useForm();
   const [formData, setFormData] = useState<any>({});
-
-  const buildHtmlString = (values: any) => {
-    const { transaction, house } = contractData;
-    return `
-      <h2 style="text-align:center;">房屋租赁合同</h2>
-      <p>出租方：<strong>${
-        transaction.landlordName
-      }</strong>（以下简称甲方）</p>
-      <p>身份证：${transaction.landlordName}</p>
-      <p>承租方：<strong>${transaction.tenantName}</strong>（以下简称乙方）</p>
-      <p>身份证：${transaction.tenantName}</p>
-      <p>房屋地址：${house.city}，房屋名称：${house.detailedAddress}</p>
-      <p>租赁期自 ${transaction.updatedAt} 起</p>
-      <p>每月租金 ${house.price} 元</p>
-      <p>银行账号：${values.bankAccount || ""}</p>
-      <p>备注：${values.notes || ""}</p>
-      <p style="text-align:right;">甲方（签字）：__________</p>
-      <p style="text-align:right;">乙方（签字）：__________</p>
-    `;
-  };
 
   const handleFormChange = () => {
     const values = form.getFieldsValue();
     setFormData(values);
-    const html = buildHtmlString(values);
-    onBuildHtml(html);
   };
 
   const renderField = (label: string, name: string) => {
@@ -118,7 +92,12 @@ const ContractFormPreview: React.FC<Props> = ({
       <div
         className="contract-preview"
         id="print-area"
-        style={{ fontSize: 20, fontWeight: 500, lineHeight: 1.5 }}
+        style={{
+          fontSize: 20,
+          fontWeight: 500,
+          lineHeight: 1.5,
+          padding: 20,
+        }}
       >
         <ContractContent
           transaction={contractData.transaction}

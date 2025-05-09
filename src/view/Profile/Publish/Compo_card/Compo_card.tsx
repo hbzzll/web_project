@@ -1,6 +1,6 @@
 import React, { useEffect, useState, Dispatch, SetStateAction } from "react";
 import { request } from "@/utils/request";
-import { Button, message, Modal, Divider } from "antd";
+import { Button, message, Modal, Divider, Badge } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
@@ -105,9 +105,7 @@ const Compo_card: React.FC<Props> = ({ list, setList }) => {
           message.success("Termination request rejected");
           setList((prev) =>
             prev.map((item) =>
-              item._id === houseId
-                ? { ...item, transactionStatus: "rented" }
-                : item
+              item._id === houseId ? { ...item, transactionStatus: 2 } : item
             )
           );
         } catch (err) {
@@ -176,10 +174,21 @@ const Compo_card: React.FC<Props> = ({ list, setList }) => {
               <Button danger onClick={() => handleCancel(item._id)}>
                 Cancel
               </Button>
-              <Button
-                icon={<UserOutlined />}
-                onClick={() => handleOpenUserList(item._id)}
-              />
+
+              {item.transactionStatus === 1 ? (
+                <Badge count={item.amount}>
+                  <Button
+                    icon={<UserOutlined />}
+                    onClick={() => handleOpenUserList(item._id)}
+                  />
+                </Badge>
+              ) : (
+                <Button
+                  icon={<UserOutlined />}
+                  onClick={() => handleOpenUserList(item._id)}
+                />
+              )}
+
               {role === "admin" && item.status === 1 && (
                 <Button
                   color="primary"

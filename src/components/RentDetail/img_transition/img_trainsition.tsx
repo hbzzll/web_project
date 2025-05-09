@@ -17,14 +17,22 @@ const Fade: React.FC<Props> = ({ images }) => {
     slidesToScroll: 1,
     waitForAnimate: false,
   };
-
+  console.log(images);
   return (
-    <div className="slider-container">
+    <div
+      className="slider-container"
+      style={{
+        width: "100%",
+        maxWidth: "1200px",
+        margin: "0 auto",
+        padding: "10px",
+      }}
+    >
       {images.length === 1 ? (
         <img
           src={images[0]}
           alt="only-img"
-          style={{ width: "100%", height: "400px" }}
+          style={{ width: "100%", height: "600px" }}
         />
       ) : (
         <Slider {...settings}>
@@ -33,7 +41,7 @@ const Fade: React.FC<Props> = ({ images }) => {
               <img
                 src={url}
                 alt={`slide-${index}`}
-                style={{ width: "100%", height: "400px" }}
+                style={{ width: "100%", height: "600px" }}
               />
             </div>
           ))}

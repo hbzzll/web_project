@@ -19,8 +19,6 @@ interface Props {
 }
 
 const ContractContent: React.FC<Props> = ({ transaction, house }) => {
-  const everyday = (house.price / 30).toFixed(2);
-
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
