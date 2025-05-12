@@ -1,4 +1,4 @@
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Button, message, Form, Input } from "antd";
 import { request } from "@/utils/request";
@@ -6,7 +6,6 @@ import ContractFormPreview from "./content/ContractForm";
 
 const SendContract = () => {
   const [params] = useSearchParams();
-  const navigate = useNavigate();
 
   const orderId = params.get("orderId");
 
@@ -48,7 +47,6 @@ const SendContract = () => {
       );
       message.success("Email sent successfully!");
       message.success("Email sent successfully!");
-      // navigate("/dashboard");
     } catch (err) {
       message.error("Failed to send email");
       message.error("Failed to send email");
